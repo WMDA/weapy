@@ -1,32 +1,39 @@
 import requests
+import sys
+from colorama import *
 
 class Weapy:
-    def __init__(self,url,*args):
-        self.args=args
+    def __init__(self,url,output,username,password):
+
         self.url=url
-        self.auth()
-        self.host()
-        print(self.req.text)
+        self.password=password
+        self.username=username
+        self.host(output)
     
-    def auth(self):
-        if self.args:
-            self.username= self.args[0]
-            self.password= self.args[1]
-        else:
-            self.username= ()
-            self.password= ()
-    
-    def host(self):
-        self.req=requests.get(self.url,auth=(self.username,self.password))
+    def host(self,output):
+        
+        try:
+            self.req=requests.get(self.url,auth=(self.username,self.password))
+        
+        except Exception:
+            print(Fore.RED + '\nCONNECTIVITY ERROR\n',Fore.WHITE +'\nUnable to connect to host.\nIs this a valid website?\nCheck your connectivity\n')
+            
+            sys.exit(1)
+        
         if self.req.status_code == 200:
-           print('\nHost is responding\n')
+
+            print(Fore.MAGENTA + '\nHost is responding\n')    
+            
+            if output==True:
+                print(self.req.text)
         else:
-           print(f'{self.req.status_code} recieved from host')
+            print(Fore.RED + f'{self.req.status_code} recieved from host')
 
-
+       
     def cookie_manipulator(self,cookie):
         cookies=cookie
         self.req=requests.get(self.url,auth=(self.username,self.password),cookies=cookie)
+
 
     
 
