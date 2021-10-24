@@ -1,14 +1,22 @@
 import requests
 import sys
-from colorama import *
+import re
+from utils import colors
+
 
 class Weapy:
-    def __init__(self,url,output,username,password):
 
-        self.url=url
-        self.password=password
-        self.username=username
+    def __init__(self,url,output,username,password,search):
+        self.colours = colors()
+        self.url = url
+        self.password = password
+        self.username = username
         self.host(output)
+        self.links_search(self.req.text)
+        
+        if search == True:
+            self.search(self.req.text)
+
     
     def host(self,output):
         
@@ -16,33 +24,38 @@ class Weapy:
             self.req=requests.get(self.url,auth=(self.username,self.password))
         
         except Exception:
-            print(Fore.RED + '\nCONNECTIVITY ERROR\n',Fore.WHITE +'\nUnable to connect to host.\nIs this a valid website?\nCheck your connectivity\n')
+            
+            print(self.colours['WARNING'] + self.colours['BLINK'] + '\nCONNECTIVITY ERROR\n',self.colours['RESET'] + '\nUnable to connect to', self.colours['RED'] + self.url, 
+            self.colours['RESET']+ '\nIs this a valid website?\nCheck your connectivity\n')
             
             sys.exit(1)
         
         if self.req.status_code == 200:
-
-            print(Fore.GREEN + '\nHost is responding\n' + Fore.WHITE)    
+       
+            print(self.colours['GREEN'] + f'\n{self.url} is responding\n' + self.colours['RESET'])
+               
             
             if output==True:
                 print(self.bs4_output(self.req.text))
 
         else:
-            print(Fore.RED + f'{self.req.status_code} recieved from host')
+            print(self.colours['RED'] + f'{self.req.status_code} recieved from {self.url}'+ self.colours['RESET'])
 
     def bs4_output(self,text):
         
         from bs4 import BeautifulSoup
-        import re
         
         '''
-        Removes the <br> tag cand changes it to a standard space
-        Also removes all the odd output to standard html tags
+        Replaces unecessary <br /> tags with spaces and unecessary & tags
         '''
         line_break= re.sub(r'<br />','\n',text)
         tag_left= re.sub(r'&lt;','<',line_break)
         tag_right= re.sub(r'&gt;','>',tag_left)
         output= re.sub(r'&nbsp;',' ',tag_right)
+
+        '''
+        Uses beautiful soup to prettify the output
+        '''
         soup = BeautifulSoup(output, features="lxml")
         pretty= soup.prettify()
         
@@ -50,15 +63,42 @@ class Weapy:
         Finds all the tags and changes what is inside the tags to purple 
         and the rest white.
         '''
-        color_beg= re.sub(r'<', Fore.MAGENTA + ' <',pretty)
-        final_output= re.sub(r'>', '> '+ Fore.WHITE, color_beg)
+        color_beg= re.sub(r'<', self.colours['PURPLE'] + '<' + self.colours['GREEN'],pretty)
+        final_output= re.sub(r'>', self.colours['PURPLE'] + '> '+ self.colours['RESET'], color_beg)
         
         return(final_output)
+
+    def dirs_search(self,text):
+
+        remove_ending_tags = re.sub(r'</.*?>','',text)
+        dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
+        filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
+        filter_links = [dir for dir in filter_no_dir if '.' not in dir ]
+        dirs = list(set(filter_links))
+        
+        return(dirs)
+
+    def links_search(self,text):
+        unfiltered_links = re.findall(r'<a href="h.*?"[^\s-]',text)
+        filter_target =  [re.sub(r'target=.*','',link) for link in unfiltered_links]
+        filter_links = [link.replace('<a href=','') for link in filter_target]
+        
+        return(filter_links)
+
+    def search(self, text):
+        
+        print('\nSearching for dirs and Links on page\n')
+
+        dirs = self.dirs_search(text)
+        output_dirs = [self.colours['LIGHT_GREEN'] + dir + self.colours['RESET'] for dir in dirs]
+        links = self.links_search(text)
+        output_links = [self.colours['LIGHT_PURPLE'] + link.replace('"','') + self.colours['RESET'] for link in links]
+
+        print(self.colours['YELLOW'] + self.colours['BOLD'] + '\nDirs found in page:\n' + self.colours['RESET'])
+        print(*output_dirs,sep='\n')
+        print(self.colours['BLUE'] + self.colours['BOLD'] + '\nLinks found:\n'+ self.colours['RESET'])
+        print(*output_links,sep='\n')
 
     def cookie_manipulator(self,cookie):
         cookies=cookie
         self.req=requests.get(self.url,auth=(self.username,self.password),cookies=cookie)
-
-
-    
-
