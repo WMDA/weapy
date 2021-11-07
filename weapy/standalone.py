@@ -1,0 +1,76 @@
+import argparse
+import sys
+from utils import colors
+
+def set_arguments():
+    
+    option = argparse.ArgumentParser()
+    
+    option.add_argument('-u','--url',dest='url',help='URL of website')
+    
+    option.add_argument('--user',dest='user',help='Username to access website, optional')
+    
+    option.add_argument('-p','--password',dest='password',help='Password to access website, optional')
+    
+    option.add_argument('-o','--output',dest='output',help='Prints source code to terminal screen', action='store_true')
+    
+    option.add_argument('-s','--search',dest='search',help='Searches for links and directories in source code', action='store_true')
+    
+    arg = vars(option.parse_args())
+    
+    if not arg['url']:
+
+        option.error('>> No URL given. Use -u or --url to provide URL. Use -h or --help for more info')
+    
+    return arg
+
+
+def clean_dictionary(dictionary):
+
+    for (key,val) in dictionary.items():
+        if val == None:
+            dictionary.update({key: False})
+    
+    return(dictionary)
+
+
+def clean_url(url):
+    
+    if 'www.' not in url:
+        url = 'www.' + url
+
+    if 'http' not in url:
+        url = 'http://' + url
+    
+    tld = ['.com','.co.uk','.edu','.io','.ac.uk']
+
+    check = [check for check in tld if check in url]
+
+    if len(check) == 0:
+
+        colours = colors()
+        
+        print(colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL')
+        
+        sys.exit(1)
+    
+    return(url)
+
+
+def arguments():
+    
+    set_args = set_arguments()
+
+    args = clean_dictionary(set_args)
+
+    url = clean_url(args['url'])
+    
+    args.update({'url':url})
+
+    return(args)
+
+
+
+
+
+        

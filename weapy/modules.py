@@ -6,22 +6,37 @@ from utils import colors
 
 class Weapy:
 
-    def __init__(self,url,output,username,password,search):
+    def __init__(self,args):
+        
+        self.args(args)
         self.colours = colors()
-        self.url = url
-        self.password = password
-        self.username = username
-        self.host(output)
+        self.host(self.output)
         self.links_search(self.req.text)
         
-        if search == True:
-            self.search(self.req.text)
+        if self.search == True:
+            self.search_page(self.req.text)
 
-    
+    def args(self,args):
+
+        '''
+        Assigns keywords to self parameter
+        '''
+
+
+        self.url = args['url']
+        
+        self.password = args['password']
+        
+        self.username = args['user']
+        
+        self.output = args['output']
+        
+        self.search = args['search']
+
     def host(self,output):
         
         try:
-            self.req=requests.get(self.url,auth=(self.username,self.password))
+            self.req = requests.get(self.url,auth=(self.username,self.password))
         
         except Exception:
             
@@ -46,7 +61,7 @@ class Weapy:
         from bs4 import BeautifulSoup
         
         '''
-        Replaces unecessary <br /> tags with spaces and unecessary & tags
+        Replaces unecessary <br /> tags with spaces and unecessary & tags with < or >
         '''
         line_break= re.sub(r'<br />','\n',text)
         tag_left= re.sub(r'&lt;','<',line_break)
@@ -57,6 +72,7 @@ class Weapy:
         Uses beautiful soup to prettify the output
         '''
         soup = BeautifulSoup(output, features="lxml")
+        
         pretty= soup.prettify()
         
         '''
@@ -64,6 +80,7 @@ class Weapy:
         and the rest white.
         '''
         color_beg= re.sub(r'<', self.colours['PURPLE'] + '<' + self.colours['GREEN'],pretty)
+        
         final_output= re.sub(r'>', self.colours['PURPLE'] + '> '+ self.colours['RESET'], color_beg)
         
         return(final_output)
@@ -71,32 +88,52 @@ class Weapy:
     def dirs_search(self,text):
 
         remove_ending_tags = re.sub(r'</.*?>','',text)
+
         dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
+
         filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
+
         filter_links = [dir for dir in filter_no_dir if '.' not in dir ]
+
         dirs = list(set(filter_links))
         
         return(dirs)
 
     def links_search(self,text):
-        unfiltered_links = re.findall(r'<a href="h.*?"[^\s-]',text)
+        
+        text_filter = re.sub('<a','',text)
+
+        unfiltered_links = re.findall(r'href="h.*?"[^\s-]',text_filter)
+
         filter_target =  [re.sub(r'target=.*','',link) for link in unfiltered_links]
-        filter_links = [link.replace('<a href=','') for link in filter_target]
+
+        filter_ending_tag = [re.sub('</a>','',link) for link in filter_target]
+
+        filter_tags = [link.replace(r'<.*>','') for link in filter_ending_tag]
+
+        filter_links = [link.replace('href=','') for link in filter_tags]
+
         
         return(filter_links)
 
-    def search(self, text):
+    def search_page(self, text):
         
         print('\nSearching for dirs and Links on page\n')
 
         dirs = self.dirs_search(text)
+        
         output_dirs = [self.colours['LIGHT_GREEN'] + dir + self.colours['RESET'] for dir in dirs]
+        
         links = self.links_search(text)
+        
         output_links = [self.colours['LIGHT_PURPLE'] + link.replace('"','') + self.colours['RESET'] for link in links]
 
         print(self.colours['YELLOW'] + self.colours['BOLD'] + '\nDirs found in page:\n' + self.colours['RESET'])
+
         print(*output_dirs,sep='\n')
+
         print(self.colours['BLUE'] + self.colours['BOLD'] + '\nLinks found:\n'+ self.colours['RESET'])
+
         print(*output_links,sep='\n')
 
     def cookie_manipulator(self,cookie):

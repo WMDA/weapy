@@ -1,32 +1,5 @@
-import argparse
-
-def arguments():
-    option=argparse.ArgumentParser()
-    option.add_argument('-u','--url',dest='url',help='URL of website')
-    option.add_argument('--user',dest='user',help='Username to access website, optional')
-    option.add_argument('-p','--password',dest='password',help='Password to access website, optional')
-    option.add_argument('-o','--output',dest='output',help='Prints source code to terminal screen', action='store_true')
-    option.add_argument('-s','--search',dest='search',help='Searches for links and directories in source code', action='store_true')
-    
-    arguments=option.parse_args()
-    
-    if not arguments.url:
-
-        option.error('>> No URL given. Use -u or --url to provide URL. Use -h / --help for more info')
-
-    if ('http://www.' or 'https://www.') not in arguments.url:
-
-        arguments.url = 'http://www.' + arguments.url
-        
-        return arguments
-        
-    
-    else:
-        
-        return arguments
-
-
 def colors():
+    
     colors= {
     'HEADER' :'\033[95m',
     'BLUE' : '\033[94m',
