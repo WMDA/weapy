@@ -15,6 +15,8 @@ def set_arguments():
     option.add_argument('-o','--output',dest='output',help='Prints source code to terminal screen', action='store_true')
     
     option.add_argument('-s','--search',dest='search',help='Searches for links and directories in source code', action='store_true')
+
+    option.add_argument('-w','--webanalyser', dest='webanal', help='Analyses web technology using Wappalyzer',action = 'store_true')
     
     arg = vars(option.parse_args())
     
@@ -36,19 +38,30 @@ def clean_dictionary(dictionary):
 
 def clean_url(url):
     
+    colours = colors()
+
     if 'www.' not in url:
-        url = 'www.' + url
+
+        if 'http' not in url:
+            url = 'www.' + url
+
+    if 'www.http' in url:
+        print(colours['WARNING'] + f"Weird {url}, this won't work" + colours['RESET'])
+        sys.exit(1)
+
+    
+
 
     if 'http' not in url:
         url = 'http://' + url
     
-    tld = ['.com','.co.uk','.edu','.io','.ac.uk']
+    tld = ['.com','.co.uk','.edu','.io','.ac.uk','.html']
 
     check = [check for check in tld if check in url]
 
     if len(check) == 0:
 
-        colours = colors()
+        
         
         print(colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL')
         

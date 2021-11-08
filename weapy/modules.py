@@ -9,19 +9,27 @@ class Weapy:
     def __init__(self,args):
         
         self.args(args)
-        self.colours = colors()
-        self.host(self.output)
-        self.links_search(self.req.text)
         
+        self.colours = colors()
+        
+        self.host(self.output)
+
+        print(self.req.cookies.get_dict())
+
         if self.search == True:
+
             self.search_page(self.req.text)
+
+        if self.webanal == True:
+
+            self.webanalyzer(self.url)
 
     def args(self,args):
 
         '''
         Assigns keywords to self parameter
+        
         '''
-
 
         self.url = args['url']
         
@@ -32,6 +40,8 @@ class Weapy:
         self.output = args['output']
         
         self.search = args['search']
+
+        self.webanal = args['webanal']
 
     def host(self,output):
         
@@ -135,7 +145,33 @@ class Weapy:
         print(self.colours['BLUE'] + self.colours['BOLD'] + '\nLinks found:\n'+ self.colours['RESET'])
 
         print(*output_links,sep='\n')
+    
+    def webanalyzer(self,url):
+
+        from Wappalyzer import Wappalyzer, WebPage
+        
+        import warnings
+        
+        # Wappalyzer throws up unbalanced parentheses warnings
+        warnings.filterwarnings('ignore')
+        
+        wappalyzer = Wappalyzer.latest()
+        
+        # Create webpage
+        
+        webpage=WebPage.new_from_url(url)
+        
+        # analyze
+        
+        results = wappalyzer.analyze_with_categories(webpage)
+
+        technology = [self.colours['BLUE'] + tech + self.colours['RESET'] for tech in results.keys()]
+        
+        print(self.colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + self.colours['RESET'])
+        print(*technology,sep='\n')
+
 
     def cookie_manipulator(self,cookie):
-        cookies=cookie
-        self.req=requests.get(self.url,auth=(self.username,self.password),cookies=cookie)
+        session_cookies = self.req.cookies
+        #cookies=cookie
+        #self.req=requests.get(self.url,auth=(self.username,self.password),cookies=cookie)
