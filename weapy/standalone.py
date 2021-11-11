@@ -83,7 +83,7 @@ def arguments():
 
     url = clean_url(args['url'])
 
-    header = clean_header(args['header'])
+    #header = clean_header(args['header'])
     
     args.update({'url':url})
 

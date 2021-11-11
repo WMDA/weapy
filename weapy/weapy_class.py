@@ -22,7 +22,7 @@ class Weapy:
 
         if self.webanal == True:
 
-            enum.webanalyzer(self.url)
+            enum.webanalyzer_output(self.url)
 
         if self.ctf == True:
 

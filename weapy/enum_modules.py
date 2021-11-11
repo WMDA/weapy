@@ -121,8 +121,6 @@ def webanalyzer(url):
     # Wappalyzer throws up unbalanced parentheses warnings
     warnings.filterwarnings('ignore')
         
-    colours = colors()
-
     wappalyzer = Wappalyzer.latest()
         
     # Create webpage
@@ -131,14 +129,29 @@ def webanalyzer(url):
         
     # analyze
         
-    results = wappalyzer.analyze_with_categories(webpage)
+    results = wappalyzer.analyze_with_versions_and_categories(webpage)
+    
+    technology =[]
+    
+    for tech_key, tech_val in results.items():
+            techno_dict={'Categories': tech_val['categories'], 'name':tech_key, 'version':tech_val['versions']}    
+            if techno_dict not in technology:
+                technology.append(techno_dict)
 
-    technology = [colours['BLUE'] + tech + colours['RESET'] for tech in results.keys()]
-        
-    print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['RESET'])
+    return(technology)
 
-    print(*technology,sep='\n')
+def webanalyzer_output(url):
+    
+    webanalyser = webanalyzer(url)
+    
+    colours = colors()
+    
+    print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['BLUE'])
+    
+    for techno in webanalyser:
+        print(*techno['Categories'],':', techno['name'],*techno['version'])
 
+    print('\n' + colours['RESET'])
 
 def header_output(website_headers):
 
