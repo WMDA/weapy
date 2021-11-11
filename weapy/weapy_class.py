@@ -4,10 +4,29 @@ from utils import colors
 import enum_modules as enum
 
 
-class Weapy:
+class WeaPy:
+
+    '''
+    WeaPy main class. Calls functions based on arguments passed, assigns arguments to self parameter,
+    makes get request to website along with header and cookie info. 
+    '''
 
     def __init__(self,args):
-        
+
+        '''
+        init function. Calls functions based on arguments
+
+        Parameters
+        ---------------
+        self : self parameter
+        args : dictionary of arguments
+
+        Returns
+        -----------------
+        GET request to website with header info
+        enum modules : optional 
+        '''
+
         self.args(args)
         
         self.colours = colors()
@@ -32,7 +51,16 @@ class Weapy:
 
         '''
         Assigns keywords to self parameter
-        
+
+        Parameters
+        ---------------
+        self : self parameter
+        args : Python dictionary of arguments
+
+        Returns
+        ----------------
+        arguments assigned to self parameter
+
         '''
 
         self.url = args['url']

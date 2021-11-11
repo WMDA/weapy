@@ -1,5 +1,5 @@
 from standalone import arguments
-from weapy_class import Weapy
+from weapy_class import WeaPy
 from utils import colors
 import sys
 
@@ -8,7 +8,7 @@ if __name__ == '__main__':
     arg = arguments()
     
     try:
-        Weapy(arg)
+        WeaPy(arg)
 
     except KeyboardInterrupt:
         
