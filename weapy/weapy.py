@@ -1,8 +1,8 @@
 from standalone import arguments
-from modules import Weapy
+from weapy_class import Weapy
 
 if __name__ == '__main__':
     
-    arg=arguments()
+    arg = arguments()
     
     Weapy(arg)
