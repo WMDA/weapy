@@ -47,6 +47,14 @@ class WeaPy:
 
             enum.ctf_mode(self.req.text)
 
+        if self.javascript ==True:
+
+            enum.javascript_output(self.req.text)
+
+        if self.css ==True:
+
+            enum.css_output(self.req.text)
+
     def args(self,args):
 
         '''
@@ -83,6 +91,10 @@ class WeaPy:
 
         self.verbose = args['verbose']
 
+        self.javascript = args['javascript']
+
+        self.css = args['css']
+
 
 
     def get(self,output):
@@ -101,7 +113,6 @@ class WeaPy:
        
             print(self.colours['GREEN'] + f'\n{self.url} is responding\n' + self.colours['RESET'])
                
-            
             if output==True:
 
                 print(enum.bs4_output(self.req.text))

@@ -1,6 +1,7 @@
 import argparse
 import sys
 from utils import colors
+import re
 
 def set_arguments():
     
@@ -13,6 +14,10 @@ def set_arguments():
     option.add_argument('--password',dest='password',help='Password to access website, optional')
     
     option.add_argument('-o','--output',dest='output',help='Prints source code to terminal screen', action='store_true')
+
+    option.add_argument('-j','--javascript',dest='javascript',help='Prints javascript source code to terminal screen', action='store_true')
+
+    option.add_argument('--css',dest='css',help='Prints css source code to terminal screen', action='store_true')
     
     option.add_argument('-s','--search',dest='search',help='Searches for links and directories in source code', action='store_true')
 
@@ -24,8 +29,10 @@ def set_arguments():
 
     option.add_argument('-c','--cookie',dest = 'cookie', help = 'set cookie name and value. Usage is python dict ({name:value})')
 
-    option.add_argument('-H','--header',dest = 'header', help = 'set modified header. Usage is python dict ({name:value})',)
+    option.add_argument('-H','--header',dest = 'header', help = 'set modified header. Usage is python dict ({name:value})')
     
+    option.add_argument('--debug',dest = 'debug', help = 'prints out args dictionary to help with development', action='store_true')
+
     arg = vars(option.parse_args())
     
     if not arg['url']:
@@ -60,7 +67,7 @@ def clean_url(url):
     if 'http' not in url:
         url = 'http://' + url
     
-    tld = ['.com','.co.uk','.edu','.io','.ac.uk','.html','.org']
+    tld = ['.com','.co.uk','.edu','.io','.ac.uk','.html','.org','.app','.amazon']
 
     check = [check for check in tld if check in url]
 
@@ -72,8 +79,18 @@ def clean_url(url):
     
     return(url)
 
-def clean_header(header):
-    print(header)
+def clean(string_to_clean):
+    
+    key = re.findall(r'{.*?:',string_to_clean)
+    val = re.findall(r':.*?}',string_to_clean)
+    
+    key = str(*key).strip(':').strip('{')
+    val = str(*val).strip(':').strip('}')
+
+    dictionary = {key:val}
+    
+    return(dictionary)
+    
 
 def arguments():
     
@@ -83,8 +100,23 @@ def arguments():
 
     url = clean_url(args['url'])
 
-    #header = clean_header(args['header'])
+    if args['header'] != False: 
+        header = clean(args['header'])
     
-    args.update({'url':url})
+    else:
+        header = args['header']
+
+    if args['cookie'] != False: 
+        cookie = clean(args['cookie'])
+
+    else:
+        cookie = args['cookie']
+    
+    args.update({'url':url, 'header':header, 'cookie':cookie})
+
+    if args['debug'] == True:
+        print(args)
 
     return(args)
+
+

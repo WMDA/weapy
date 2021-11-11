@@ -50,23 +50,34 @@ def dirs_search(text):
 
 def links_search(text):
     
-    text_filter = re.sub('<a','',text)
+    href_text_filter = re.sub('<a','',text)
 
-    unfiltered_links = re.findall(r'href="h.*?"[^\s-]',text_filter)
+    href_unfiltered_links = re.findall(r'href="h.*?"[^\s-]',href_text_filter)
 
-    filter_target =  [re.sub(r'target=.*','',link) for link in unfiltered_links]
+    href_filter_target =  [re.sub(r'target=.*','',link) for link in href_unfiltered_links]
 
-    filter_ending_tag = [re.sub('</a>','',link) for link in filter_target]
+    href_filter_ending_tag = [re.sub('</a>','',link) for link in href_filter_target]
 
-    filter_tags = [link.replace(r'<.*>','') for link in filter_ending_tag]
+    href_filter_tags = [link.replace(r'<.*>','') for link in href_filter_ending_tag]
 
-    filter_links = [link.replace('href=','') for link in filter_tags]
+    href_filter_links = [link.replace('href=','') for link in href_filter_tags]
+
+    href_filter_links = [link.replace('>','') for link in href_filter_links]
+
+    src_links = re.findall(r'src=.*?>',text)
+
+    unfiltered_src_links = [re.sub(r'src=','',link) for link in src_links]
+
+    filtered_src_links = [re.sub(r'>','',link) for link in unfiltered_src_links]
+
+    filter_links = href_filter_links + filtered_src_links
    
     return(filter_links)
 
+
 def file_search(text):
     
-    file_type =['gif','txt','jpeg']
+    file_type =['gif','txt','jpeg','php','html']
     
     files=[]
     
@@ -75,12 +86,12 @@ def file_search(text):
         
         for file in file_list:
             if file not in files:
-                files.append(file)
+                if '.'in file:
+                    files.append(file)
 
     return(files)
 
     
-
 def search_page(text):
         
     colours = colors()
@@ -110,7 +121,6 @@ def search_page(text):
     print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n'+  colours['RESET'])
 
     print(*output_links,sep='\n')
-    
     
 def webanalyzer(url):
 
@@ -181,7 +191,7 @@ def ctf_mode(website_code):
     further_search = re.findall(r'.*:.*', sub_out_http)
 
     passwords = passwords + further_search
-
+    
     if len(passwords) >0:
         print(colours['BLINK'] + colours['YELLOW'] + colours['BOLD'] +
         'POTENTIAL PASSWORDS FOUND!!' + colours['RESET'] + colours['BOLD'])
@@ -190,3 +200,58 @@ def ctf_mode(website_code):
     
     else:
         print(colours['WARNING'] + 'NO PASSWORDS FOUND')
+
+def javascript_links(text):
+    
+    links= links_search(text)
+
+    java_script = [js for js in links if '.js' in js]
+
+    return(java_script)
+
+def css_links(text):
+        
+    links= links_search(text)
+
+    css = [css for css in links if '.css' in css]
+
+    return(css)
+
+def javascript_output(text):
+
+    import requests
+
+    js_links= javascript_links(text)
+
+    for js in js_links:
+        js = re.sub(r'"','',js)
+
+        try:
+            
+            js_page = requests.get(js)
+
+            print(js)
+            print(js_page.text)
+
+        except:
+            print(js)
+            print('Unable to open page') 
+
+def css_output(text):
+
+    import requests
+
+    css_link= css_links(text)
+
+    for css in css_link:
+        css = re.sub(r'"','',css)
+
+        try:
+            
+            css_page = requests.get(css)
+            print(css)
+            print(css_page.text)
+
+        except:
+            print(css)
+            print('Unable to open page')
