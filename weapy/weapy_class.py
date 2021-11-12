@@ -55,6 +55,12 @@ class WeaPy:
 
             enum.css_output(self.req.text)
 
+        if self.data != False:
+
+            self.post()
+
+        
+
     def args(self,args):
 
         '''
@@ -95,6 +101,8 @@ class WeaPy:
 
         self.css = args['css']
 
+        self.data = args['post']
+
 
 
     def get(self,output):
@@ -127,6 +135,17 @@ class WeaPy:
         if self.verbose == True:
 
             enum.header_output(self.web_header)
+
+    def post(self):
+
+        try:
+            self.req_post = requests.post(self.url, data = self.data, auth = (self.username, self.password))
+
+            print(enum.bs4_output(self.req_post.text))
+
+        except Exception:
+            print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
+            sys.exit(1)
 
 
 
