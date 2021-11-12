@@ -48,31 +48,11 @@ def dirs_search(text):
         
     return(dirs)
 
-def links_search(text):
-    
-    href_text_filter = re.sub('<a','',text)
+def links_search(text): 
 
-    href_unfiltered_links = re.findall(r'href="h.*?"[^\s-]',href_text_filter)
-
-    href_filter_target =  [re.sub(r'target=.*','',link) for link in href_unfiltered_links]
-
-    href_filter_ending_tag = [re.sub('</a>','',link) for link in href_filter_target]
-
-    href_filter_tags = [link.replace(r'<.*>','') for link in href_filter_ending_tag]
-
-    href_filter_links = [link.replace('href=','') for link in href_filter_tags]
-
-    href_filter_links = [link.replace('>','') for link in href_filter_links]
-
-    src_links = re.findall(r'src=.*?>',text)
-
-    unfiltered_src_links = [re.sub(r'src=','',link) for link in src_links]
-
-    filtered_src_links = [re.sub(r'>','',link) for link in unfiltered_src_links]
-
-    filter_links = href_filter_links + filtered_src_links
-   
-    return(filter_links)
+   page = bs4_output(text)
+   html_links = re.findall(r'(http.*//.*?[^\'"><]+)',page)
+   return(html_links)
 
 
 def file_search(text):
