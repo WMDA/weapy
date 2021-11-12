@@ -54,18 +54,20 @@ def dirs_search(text):
 def links_search(text): 
 
    page = bs4_output(text)
+   
    html_links = re.findall(r'(http.*//.*?[^\'"><]+)',page)
+
    return(html_links)
 
 
 def file_search(text):
     
-    file_type =['gif','txt','jpeg','php','html']
+    file_type =['gif','txt','jpeg','html']
     
     files=[]
     
     for format in file_type:     
-        file_list = re.findall(r'[A-Za-z0-9]*.{}'.format(format),text)
+        file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format),text)
         
         for file in file_list:
             if file not in files:
