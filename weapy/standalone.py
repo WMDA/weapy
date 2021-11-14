@@ -1,7 +1,10 @@
+#External Modules
 import argparse
 import sys
-from modules.utils import colors
 import re
+
+#WeaPy modules
+from modules.prettify.colours import colors
 
 def set_arguments():
     

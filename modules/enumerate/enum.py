@@ -1,144 +1,104 @@
 #External Modules
+from bs4 import BeautifulSoup
 import re
-import requests
 
-#Modules from WeaPy
-from modules.utils import colors
-from modules.enumerate import enum_modules as enum
+#WeaPy Modules
+from modules.prettify.colours import colors
 
 '''
-This is the enumerate modules output.
-
-Most of WeaPy enumerates logic happens in the enum_modules while enum handles making the output look cooleo.
+WeaPys enumerate modules
 '''
-
-def bs4_output(request):
-
-    '''
-    Prettifys and adds colour to BeautifulSoup output.
-
-    Parameters
-    ----------------------------------------------
-    Request (str): HTML source code from requests module
-
-    Returns
-    ----------------------------------------------
-    final_output (str) : Output from Beautiful Soup's prettify with coloured source code.
-
-    '''
-
-    colours = colors()
-
-    soup= enum.bs4_parse(request)
-
-    pretty = soup.prettify()
-
-    color_beg= re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'],pretty)
-       
-    final_output= re.sub(r'>', colours['PURPLE'] + '> '+ colours['RESET'], color_beg)
-      
-    return(final_output)
-
     
-def search_page(request):
+def bs4_parse(request):
+    
+    '''
+    Replaces unecessary <br /> tags with spaces and unecessary & tags with < or >
+    '''
+
+    line_break= re.sub(r'<br />','\n',request)
+    tag_left= re.sub(r'&lt;','<',line_break)
+    tag_right= re.sub(r'&gt;','>',tag_left)
+    output= re.sub(r'&nbsp;',' ',tag_right)
 
     '''
-    Prints to terminal all of the links, files and dirs found in coloured format
-
-
-    Paramters
-    ---------------------------------
-    Request (str): HTML source code from requests module
-
-
-    Returns
-    ----------------------------------
-    output_links (list): coloured list of links found in page (prints to terminal).
-    output_dirs (list): coloured list of dirs found in page (prints to terminal).
-    files_in_page (list): coloured list of files found in page (prints to terminal).
-
+    Uses beautiful soup to prettify the output
     '''
+    soup = BeautifulSoup(output, features="lxml")
+    
+    return (soup)  
+
+def dirs_search(text):
+
+    remove_ending_tags = re.sub(r'</.*?>','',text)
+
+    dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
+
+    filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
+
+    filter_links = [dir for dir in filter_no_dir if '.' not in dir ]
+
+    dirs = list(set(filter_links))
         
-    colours = colors()
+    return(dirs)
 
-    print('\nSearching for Files Dirs and Links on page\n')
+def links_search(text): 
 
-    files = enum.file_search(request)
+   soup = bs4_parse(text)
 
-    files_in_page = [colours['LIGHT_CYAN'] + file + colours['RESET'] for file in files]
+   page = soup.prettify()
+   
+   html_links = re.findall(r'(http.*//.*?[^\'"><]+)',page)
 
-    dirs = enum.dirs_search(request)
+   return(html_links)
+
+
+def file_search(text):
+    
+    file_type =['gif','txt','jpeg','html']
+    
+    files=[]
+    
+    for format in file_type:     
+        file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format),text)
         
-    output_dirs = [colours['LIGHT_GREEN'] + dir + colours['RESET'] for dir in dirs]
-      
-    links = enum.links_search(request)
+        for file in file_list:
+            if file not in files:
+                if '.'in file:
+                    files.append(file)
+
+    return(files)
+
+
+def webanalyzer(url):
+
+    from Wappalyzer import Wappalyzer, WebPage
         
-    output_links = [colours['LIGHT_PURPLE'] + link.replace('"','') + colours['RESET'] for link in links]
-
-    print(colours['PURPLE'] + colours['BOLD'] + '\nFiles found in page:\n' + colours['RESET'])
-
-    print(*files_in_page,sep='\n')
-
-    print(colours['YELLOW'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
-
-    print(*output_dirs,sep='\n')
-
-    print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n'+  colours['RESET'])
-
-    print(*output_links,sep='\n')
-    
-
-def webanalyzer_output(url):
-
-    '''
-    Prints to terminal all of the backend technology found in webpage. Utilizes Wappalyzer for python
-
-
-    Paramters
-    ---------------------------------
-    URL (str): Webpage URL
-
-
-    Returns
-    ----------------------------------
-
-    techno (list of dictionary items): Coloured list of dictionary items of backend category, name and version
-
-
-    '''
+    import warnings
         
-    
-    webanalyser = enum.webanalyzer(url)
-    
-    colours = colors()
-    
-    print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['BLUE'])
-    
-    for techno in webanalyser:
-        print(*techno['Categories'],':', techno['name'],*techno['version'])
-
-    print('\n' + colours['RESET'])
-
-
-def header_output(website_headers):
-
-    colours = colors()
-
-    print(colours['PURPLE'] + colours['BOLD'] + '\nHeader and Set Cookie info\n' + colours['RESET'])
-
-    for header_key, header_value in website_headers.items():
+    # Wappalyzer throws up unbalanced parentheses warnings
+    warnings.filterwarnings('ignore')
         
-        if r'Set-Cookie' in header_key:
-            print(colours['BLINK'] + colours['YELLOW'] + header_key + colours['RESET'], colours['PURPLE'] + header_value + colours['RESET'])
+    wappalyzer = Wappalyzer.latest()
+        
+    # Create webpage
+        
+    webpage = WebPage.new_from_url(url)
+        
+    # analyze
+        
+    results = wappalyzer.analyze_with_versions_and_categories(webpage)
+    
+    technology =[]
+    
+    for tech_key, tech_val in results.items():
+            techno_dict={'Categories': tech_val['categories'], 'name':tech_key, 'version':tech_val['versions']}    
+            if techno_dict not in technology:
+                technology.append(techno_dict)
 
-        else:
-            print(header_key, header_value)
+    return(technology)
 
 def ctf_mode(website_code):
 
-    '''
-    Work in progress. May move from enumerate modules. Functionally Works but function may need to be split up
-    '''
     colours = colors()
     
     passwords = re.findall('password[\w\s.].*', website_code)
@@ -159,78 +119,43 @@ def ctf_mode(website_code):
         print(*passwords, sep='\n')
     
     else:
-        print(colours['RED'] + 'NO PASSWORDS FOUND' + colours['RESET'])
+        print(colours['WARNING'] + 'NO PASSWORDS FOUND')
 
-def javascript_output(text):
+def javascript_links(text):
+    
+    links= links_search(text)
 
-    '''
-    Prints .js files to terminal.
-    Needs further work
-    '''
+    java_script = [js for js in links if '.js' in js]
 
-    colours = colors
+    return(java_script)
 
-    js_links= enum.javascript_links(text)
-
-    for js in js_links:
-        js = re.sub(r'"','',js)
-
-        try:
-            
-            js_page = requests.get(js)
-
-            print(js)
-            print(js_page.text)
-
-        except:
-            print(js)
-            print(colours['RED'] +'Unable to open page' + colours['RESET']) 
-
-def css_output(text):
-
-    '''
-    Prints .js files to terminal.
-    Needs further work
-    '''
-
-
-
-    css_link= enum.css_links(text)
-
-    for css in css_link:
-        css = re.sub(r'"','',css)
-
-        try:
-            
-            css_page = requests.get(css)
-            print(css)
-            print(css_page.text)
-
-        except:
-            print(css)
-            print('Unable to open page')
-
-def input_forms(request):
-
-    '''
-    Work in progress. Functionally works however function may need to be split up.
-    '''
+def css_links(text):
         
-    colours =colors()
-        
-    forms = enum.find_input_forms(request)
-    form_details = enum.get_form_details(forms)
+    links= links_search(text)
+
+    css = [css for css in links if '.css' in css]
+
+    return(css)
 
 
-    for val in form_details['inputs']:
-        if val['type'] !='submit':
-            if val['value'] =='':
-                print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
-                value=input()
-                val['value'] = value
+def find_input_forms(request):
+    soup = bs4_parse(request)
+    forms = soup.find('form')
+    return(forms)
 
-        elif val['type'] == 'submit':
-            if val['value'] =='':
-                val['value'] ='submit'
-        
-    return(form_details)
+def get_form_details(form):
+    details = {}
+    # get the form action (requested URL)
+    action = form.get("action")
+    method = form.attrs.get("method", "get")
+    inputs = []
+    for input_tag in form.find_all("input"):
+        input_type = input_tag.attrs.get("type", "text")
+        input_name = input_tag.attrs.get("name")
+        input_value =input_tag.attrs.get("value", "")
+        inputs.append({"type": input_type, "name": input_name, "value": input_value})
+    details["action"] = action
+    details["method"] = method
+    details["inputs"] = inputs
+    return (details)
+    

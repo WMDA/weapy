@@ -1,7 +1,10 @@
-from weapy.standalone import arguments
-from weapy.weapy_class import WeaPy
-from modules.utils import colors
+#External Modules
 import sys
+
+#WeaPy Modules
+from weapy.standalone import arguments
+from modules.prettify.colours import colors
+from weapy.weapy_class import WeaPy
 
 if __name__ == '__main__':
     

@@ -3,8 +3,8 @@ import requests
 import sys
 
 # WeaPy modules
-from modules.utils import colors
-import modules.enumerate.enum as enum
+from modules.prettify.colours import colors
+import modules.prettify.enum_output as enum
 
 
 class WeaPy:
@@ -18,12 +18,10 @@ class WeaPy:
 
         '''
         init function. Calls functions based on arguments
-
         Parameters
         ---------------
         self : self parameter
         args : dictionary of arguments
-
         Returns
         -----------------
         GET request to website with header info
@@ -68,16 +66,13 @@ class WeaPy:
 
         '''
         Assigns keywords to self parameter
-
         Parameters
         ---------------
         self : self parameter
         args : Python dictionary of arguments
-
         Returns
         ----------------
         arguments assigned to self parameter
-
         '''
 
         self.url = args['url']
@@ -183,10 +178,3 @@ class WeaPy:
                 
                 print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
                 sys.exit(1)
-
-
-
-        
-
-        
-
