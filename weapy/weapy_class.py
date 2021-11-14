@@ -1,5 +1,8 @@
+# External Modules 
 import requests
 import sys
+
+# WeaPy modules
 from modules.utils import colors
 import modules.enumerate.enum as enum
 
