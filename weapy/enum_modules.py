@@ -1,21 +1,20 @@
 import re
+
+from pkg_resources import empty_provider
 from utils import colors
+from bs4 import BeautifulSoup
 
 '''
 WeaPys enumerate modules
 '''
     
-def bs4_output(text):
-        
-    from bs4 import BeautifulSoup
-        
-    colours = colors()
+def bs4_parse(request):
     
     '''
     Replaces unecessary <br /> tags with spaces and unecessary & tags with < or >
     '''
 
-    line_break= re.sub(r'<br />','\n',text)
+    line_break= re.sub(r'<br />','\n',request)
     tag_left= re.sub(r'&lt;','<',line_break)
     tag_right= re.sub(r'&gt;','>',tag_left)
     output= re.sub(r'&nbsp;',' ',tag_right)
@@ -24,9 +23,14 @@ def bs4_output(text):
     Uses beautiful soup to prettify the output
     '''
     soup = BeautifulSoup(output, features="lxml")
-        
+    
+    return (soup)  
+
+def bs4_output(request):
+
+    colours = colors()
+    soup= bs4_parse(request)
     pretty = soup.prettify()
-        
     '''
     Finds all the tags and changes what is inside the tags to purple 
     and the rest white.
@@ -240,3 +244,53 @@ def css_output(text):
         except:
             print(css)
             print('Unable to open page')
+
+def find_input_forms(request):
+    soup = bs4_parse(request)
+    forms = soup.find('form')
+    return(forms)
+
+def get_form_details(form):
+    details = {}
+    # get the form action (requested URL)
+    action = form.get("action")
+    method = form.attrs.get("method", "get")
+    inputs = []
+    for input_tag in form.find_all("input"):
+        input_type = input_tag.attrs.get("type", "text")
+        input_name = input_tag.attrs.get("name")
+        input_value =input_tag.attrs.get("value", "")
+        inputs.append({"type": input_type, "name": input_name, "value": input_value})
+    details["action"] = action
+    details["method"] = method
+    details["inputs"] = inputs
+    return (details)
+    
+
+def input_forms(request):
+        
+        colours =colors()
+        
+        forms = find_input_forms(request)
+        form_details = get_form_details(forms)
+
+
+        for val in form_details['inputs']:
+            if val['type'] !='submit':
+                if val['value'] =='':
+                    print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
+                    value=input()
+                    val['value'] = value
+
+            elif val['type'] == 'submit':
+                if val['value'] =='':
+                    val['value'] ='submit'
+        
+        return(form_details)
+
+
+            
+    
+    
+
+

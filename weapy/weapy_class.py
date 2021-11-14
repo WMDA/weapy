@@ -137,17 +137,53 @@ class WeaPy:
             enum.header_output(self.web_header)
 
     def post(self):
+        
+        form_data = enum.input_forms(self.req.text)
+        
+        data ={}
 
-        try:
-            self.req_post = requests.post(self.url, data = self.data, auth = (self.username, self.password))
-
-            print(enum.bs4_output(self.req_post.text))
-
-        except Exception:
-            print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
-            sys.exit(1)
-
+        for input in form_data['inputs']:
+            submit = {input['name']:input['value']}
+            data[input['name']] = input['value']
 
 
+        if form_data['method'].lower() =='post':
+            
+            try:
+                self.req_post = requests.post(self.url, data = data, auth = (self.username, self.password))
+                
+                if self.req_post.status_code == 200:
+                    print(enum.bs4_output(self.req_post.text))
 
+                else:
+                    print(self.colours['WARNING'] + 'Unable to make Post request'  + self.colours['RESET'])
+                    sys.exit(1)
+                
+            except Exception:
+                
+                print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
+                sys.exit(1)
+
+        elif form_data['method'].lower() =='get':
+
+            try:
+                self.req_get = requests.get(self.url, data = data, auth = (self.username, self.password))
+                
+                if self.req_get.status_code == 200:
+                    print(enum.bs4_output(self.req_post.text))
+
+                else:
+                    print(self.colours['WARNING'] + 'Unable to make request'  + self.colours['RESET'])
+                    sys.exit(1)
+                
+            except Exception:
+                
+                print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
+                sys.exit(1)
+
+
+
+        
+
+        
 
