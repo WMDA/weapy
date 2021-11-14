@@ -1,6 +1,6 @@
-from standalone import arguments
-from weapy_class import WeaPy
-from utils import colors
+from weapy.standalone import arguments
+from weapy.weapy_class import WeaPy
+from modules.utils import colors
 import sys
 
 if __name__ == '__main__':

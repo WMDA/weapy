@@ -1,6 +1,6 @@
 import argparse
 import sys
-from utils import colors
+from modules.utils import colors
 import re
 
 def set_arguments():

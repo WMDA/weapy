@@ -1,13 +1,13 @@
 import requests
 import sys
-from utils import colors
-import enum_modules as enum
+from modules.utils import colors
+import modules.enumerate.enum as enum
 
 
 class WeaPy:
 
     '''
-    WeaPy main class. Calls functions based on arguments passed, assigns arguments to self parameter,
+    WeaPy standalone main calss. Calls functions based on arguments passed, assigns arguments to self parameter,
     makes get request to website along with header and cookie info. 
     '''
 

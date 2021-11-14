@@ -1,1 +1,1 @@
-from .weapy import *
+from weapy import *

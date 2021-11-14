@@ -1,7 +1,5 @@
 import re
-
-from pkg_resources import empty_provider
-from utils import colors
+from modules.utils import colors
 from bs4 import BeautifulSoup
 
 '''
@@ -26,21 +24,6 @@ def bs4_parse(request):
     
     return (soup)  
 
-def bs4_output(request):
-
-    colours = colors()
-    soup= bs4_parse(request)
-    pretty = soup.prettify()
-    '''
-    Finds all the tags and changes what is inside the tags to purple 
-    and the rest white.
-    '''
-    color_beg= re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'],pretty)
-       
-    final_output= re.sub(r'>', colours['PURPLE'] + '> '+ colours['RESET'], color_beg)
-      
-    return(final_output)
-
 def dirs_search(text):
 
     remove_ending_tags = re.sub(r'</.*?>','',text)
@@ -57,7 +40,7 @@ def dirs_search(text):
 
 def links_search(text): 
 
-   page = bs4_output(text)
+   page = bs4_parse(text)
    
    html_links = re.findall(r'(http.*//.*?[^\'"><]+)',page)
 
@@ -80,37 +63,7 @@ def file_search(text):
 
     return(files)
 
-    
-def search_page(text):
-        
-    colours = colors()
 
-    print('\nSearching for Files Dirs and Links on page\n')
-
-    files = file_search(text)
-
-    files_in_page = [colours['LIGHT_CYAN'] + file + colours['RESET'] for file in files]
-
-    dirs = dirs_search(text)
-        
-    output_dirs = [colours['LIGHT_GREEN'] + dir + colours['RESET'] for dir in dirs]
-      
-    links = links_search(text)
-        
-    output_links = [colours['LIGHT_PURPLE'] + link.replace('"','') + colours['RESET'] for link in links]
-
-    print(colours['PURPLE'] + colours['BOLD'] + '\nFiles found in page:\n' + colours['RESET'])
-
-    print(*files_in_page,sep='\n')
-
-    print(colours['YELLOW'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
-
-    print(*output_dirs,sep='\n')
-
-    print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n'+  colours['RESET'])
-
-    print(*output_links,sep='\n')
-    
 def webanalyzer(url):
 
     from Wappalyzer import Wappalyzer, WebPage
@@ -138,33 +91,6 @@ def webanalyzer(url):
                 technology.append(techno_dict)
 
     return(technology)
-
-def webanalyzer_output(url):
-    
-    webanalyser = webanalyzer(url)
-    
-    colours = colors()
-    
-    print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['BLUE'])
-    
-    for techno in webanalyser:
-        print(*techno['Categories'],':', techno['name'],*techno['version'])
-
-    print('\n' + colours['RESET'])
-
-def header_output(website_headers):
-
-    colours = colors()
-
-    print(colours['PURPLE'] + colours['BOLD'] + '\nHeader and Set Cookie info\n' + colours['RESET'])
-
-    for header_key, header_value in website_headers.items():
-        
-        if r'Set-Cookie' in header_key:
-            print(colours['BLINK'] + colours['YELLOW'] + header_key + colours['RESET'], colours['PURPLE'] + header_value + colours['RESET'])
-
-        else:
-            print(header_key, header_value)
 
 def ctf_mode(website_code):
 
@@ -206,44 +132,6 @@ def css_links(text):
 
     return(css)
 
-def javascript_output(text):
-
-    import requests
-
-    js_links= javascript_links(text)
-
-    for js in js_links:
-        js = re.sub(r'"','',js)
-
-        try:
-            
-            js_page = requests.get(js)
-
-            print(js)
-            print(js_page.text)
-
-        except:
-            print(js)
-            print('Unable to open page') 
-
-def css_output(text):
-
-    import requests
-
-    css_link= css_links(text)
-
-    for css in css_link:
-        css = re.sub(r'"','',css)
-
-        try:
-            
-            css_page = requests.get(css)
-            print(css)
-            print(css_page.text)
-
-        except:
-            print(css)
-            print('Unable to open page')
 
 def find_input_forms(request):
     soup = bs4_parse(request)
@@ -266,31 +154,3 @@ def get_form_details(form):
     details["inputs"] = inputs
     return (details)
     
-
-def input_forms(request):
-        
-        colours =colors()
-        
-        forms = find_input_forms(request)
-        form_details = get_form_details(forms)
-
-
-        for val in form_details['inputs']:
-            if val['type'] !='submit':
-                if val['value'] =='':
-                    print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
-                    value=input()
-                    val['value'] = value
-
-            elif val['type'] == 'submit':
-                if val['value'] =='':
-                    val['value'] ='submit'
-        
-        return(form_details)
-
-
-            
-    
-    
-
-

@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
 
+def read_requirements(file):
+    with open(file) as f:
+        return f.read().splitlines()
+
 VERSION = '0.0.1' 
 DESCRIPTION = 'WeaPy'
 LONG_DESCRIPTION = 'Enumerate and scrap websites for CTFs/ethical Hacking'
@@ -14,7 +18,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=requirements.txt, 
+    install_requires=REQUIREMENTS, 
     classifiers= [
             "Development Status :: Alpha",
             "Intended Audience :: Education/CTFs/Ethical Hacking",
