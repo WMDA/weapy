@@ -1,3 +1,4 @@
-{
-	"wordlist":"/wordlists/common.txt"
+{   "wordlist_location":"wordlists",
+	"domain_wordlist":"common.txt",
+	"subdomain_wordlist":"subdomain.txt"
 }
