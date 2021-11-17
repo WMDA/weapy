@@ -1,2 +1,2 @@
 # weapy
-A website ONIST tool in python
+A website scrapper in python
