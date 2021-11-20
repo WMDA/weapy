@@ -61,6 +61,8 @@ class WaP:
         
         args = wap_arguments()
         
+        command = command.lstrip()
+
         if command not in args :
                 if 'cd' in command:
                     
@@ -118,17 +120,19 @@ class WaP:
                     self.output =True
 
     def args(self):
-        self.arguments = {'URL':self.url, 'passwd':self.passwd, 'user':self.user, 'output':self.output
-        }
+        self.arguments = {'URL':self.url, 'passwd':self.passwd, 'user':self.user, 'output':self.output}
 
-        self.help_list =['URL of website','Password to access website, optional','Username to access website, optional' ,
-                         'Prints source code to terminal screen']
+        self.help_list ={
+            'URL':'URL of website','passwd':'Password to access website, optional','user':'Username to access website, optional',
+            'output': 'Prints source code to terminal screen'
+                         }
 
     def current_output(self):
         
-        print('',self.colours['PURPLE'] + self.colours['BOLD']+ '-'*100,'\n', "\t Option \t\t\tvalue",'\n','-'*100,'\n' + self.colours['RESET'])
+        print('\n ',self.colours['PURPLE'] + self.colours['BOLD']+ '-'*100,'\n', "\t Option \t\t\tvalue \t\t\tHelp",'\n','-'*100,'\n' + self.colours['RESET'])
         
         
 
         for key , val in self.arguments.items():
-            print('\t', str(key) + "\t\t\t\t" + str(val) + "\t\t\t\t")
+            print('\t', str(key) + "\t\t\t\t" + str(val) + "\t\t\t" + self.help_list[key])
+        print('\n')
