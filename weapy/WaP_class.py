@@ -2,6 +2,7 @@
 import sys
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
+from prompt_toolkit.history import FileHistory
 import os
 
 #WeaPy Modules
@@ -30,7 +31,7 @@ class WaP:
         message =[('class:name', 'WaP@WeaPy'),
         ('class:colon', ': ')]
 
-        session = PromptSession()
+        session = PromptSession(history=FileHistory('./.WaPhistory'))
 
         self.default_args =self.default_arguments()
 
@@ -60,8 +61,15 @@ class WaP:
              print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
              
              sys.exit(0)
-        
 
+    def default_arguments(self):
+        self.url = False
+        self.password = False
+        self.user = False
+        self.output = False
+        self.header = False
+        self.verbose = False
+        self.cookie = False 
 
     def terminal_input(self,command):
         
@@ -96,15 +104,7 @@ class WaP:
                         print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'] + self.colours['RESET'])
 
 
-    def default_arguments(self):
-        self.url = False
-        self.password = False
-        self.user = False
-        self.output = False
-        self.header = False
-        self.verbose = False
-        self.cookie = False 
-        
+
 
     def set_arguments(self):
 
