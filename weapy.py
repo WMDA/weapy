@@ -2,7 +2,7 @@
 import sys
 
 #WeaPy Modules
-from weapy.standalone import arguments
+from weapy.arguments import arguments
 from modules.prettify.colours import colors
 from weapy.weapy_class import WeaPy
 
