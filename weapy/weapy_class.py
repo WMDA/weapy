@@ -31,7 +31,12 @@ class WeaPy:
 
         self.args(args)
 
-        self.http_request= HTTPRequests(args)
+        try:
+            
+            self.http_request= HTTPRequests(args)
+
+        except Exception:
+            sys.exit(1)
 
         self.colours = colors()
         
@@ -43,7 +48,7 @@ class WeaPy:
 
             enum.webanalyzer_output(self.url)
 
-        if self.ctf == True:
+        if self.ctf == True:    
 
             enum.ctf_mode(self.http_request.req.text)
 
