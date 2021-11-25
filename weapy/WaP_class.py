@@ -5,6 +5,7 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.history import FileHistory
 import os
 
+
 #WeaPy Modules
 from modules.prettify.colours import colors
 from modules.http_requests.http_request import HTTPRequests
@@ -12,7 +13,8 @@ from weapy.arguments import clean_url, clean
 
 
 def wap_arguments():
-    args = ['set', 'options','get','reset']
+    args = ['set', 'options','get',
+    'reset','reset all', 'quit']
 
     return args
 
@@ -36,31 +38,30 @@ class WaP:
 
         self.default_args =self.default_arguments()
 
+        self.args = wap_arguments()
+
         try:
             
             while True:
 
                 self.input = session.prompt(message, style=col)
-                
-                self.terminal_input(self.input)
-                
-                self.set_arguments()
 
-                self.args()
+                command = self.input.lstrip()
 
-                if self.input == 'options':
+                if command in self.args:
                     
-                    self.current_output()
+                    self.WaP_input(self.input)
 
-                if self.input == 'reset':
-                    self.default_arguments()
-
-
-                if self.input == 'get':
-
-                     self.http_request= HTTPRequests(self.arguments)
                     
+
+                else:
+                    
+                    self.terminal_input(self.input)
+
+                self.WaP_current_args()
+        
                 
+
         except KeyboardInterrupt:
              
              print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
@@ -68,6 +69,7 @@ class WaP:
              sys.exit(0)
 
     def default_arguments(self):
+        
         self.url = False
         self.password = False
         self.user = False
@@ -115,7 +117,7 @@ class WaP:
         except Exception:
             print(self.colours['RED']+ self.colours['BLINK'] + 'Cannot set Option. Type help for more help')
 
-    def args(self):
+    def WaP_current_args(self):
 
         self.arguments = {
         'url':self.url, 'password':self.password, 'user':self.user, 'output':self.output,
@@ -129,39 +131,76 @@ class WaP:
             }
 
 
-    def terminal_input(self,command):
+    def WaP_input(self,command):
+
+        '''
+        Function to call WaP sepcific commands
+        '''
+
+        if command == 'quit':
+            
+            print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
         
-        args = wap_arguments()
+            sys.exit(0)
+
+        elif command == 'reset all':
+                    
+            self.default_arguments()
+
+
+        elif self.input == 'options':
+                    
+                self.current_output()
+
         
-        command = command.lstrip()
+        elif 'set' in self.input: 
+            self.set_arguments()
 
-        if command not in args :
+        elif self.input == 'get':
 
-                if 'cd' in command:
-                    
-                    if command != 'cd':
-                        cd_input= command.split()
-                   
-                    try:
-                        os.chdir(cd_input[1])
+            try: 
+                self.http_request= HTTPRequests(self.arguments)
 
-                    except Exception:
-                        print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'])
+            except Exception:
 
-                elif command == 'quit':
-                    print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
-                    sys.exit(0)
-                    
-                    
+                if self.url == False:
+                        print(self.colours['RED'] + self.colours['BLINK'] + 'Unable to make get request, No URL sepcified!' + self.colours['RESET'])
+
                 else:
-                
-                    try:
-                        os.system(command)
+                        print(self.colours['RED'] + self.colours['BLINK'] + 'Unable to make get request' + self.colours['RESET'])
+
+
+
+    def terminal_input(self,command):
+
+        '''
+        Function so WaP can function like a normal shell.
+
+        If command 
+        '''
+
+        if 'cd' in command:
                     
-                    except Exception:
-                        print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'] + self.colours['RESET'])
+            if command != 'cd':
+
+                cd_input= command.split()
+                   
+                try:
+                    os.chdir(cd_input[1])
+
+                except Exception:
+                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'])
+                                        
+        else:
+                
+            try:
+                os.system(command)
+                    
+            except Exception:
+                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'] + self.colours['RESET'])
 
     def current_output(self):
+
         print('\n')
         print('',self.colours['PURPLE'] + self.colours['BOLD']+ '-'*200,'\n', "\t Option \t\t\t\tvalue \t\t\t\t\t\t\tHelp",'\n','-'*200,'\n' + self.colours['RESET'])
         
@@ -172,3 +211,23 @@ class WaP:
                 print('\t', str(key) + "\t\t\t\t" + str(val) + "\t\t\t\t\t\t\t" + self.help_list[key])
 
         print('\n')
+
+    def reset(self,input):
+
+        if 'url' in input:
+            self.url = False
+        elif 'password' in input:
+            self.password = False
+        elif 'user' in input:
+            self.user = False
+        elif 'output' in input:
+            self.output = False
+        elif 'header' in input:
+            self.header = False
+        elif 'verbose' in input:
+            self.verbose = False
+        elif 'cookie' in input:
+            self.cookie = False 
+        else:
+            print(self.colours['RED'] + self.colours['BOLD']+ 'I cannot understand what you are saying Dave'+ self.colours['RESET'])
+

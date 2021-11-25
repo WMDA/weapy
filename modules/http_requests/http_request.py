@@ -83,7 +83,9 @@ class HTTPRequests:
         data ={}
 
         for input in form_data['inputs']:
+
             submit = {input['name']:input['value']}
+            
             data[input['name']] = input['value']
 
 
