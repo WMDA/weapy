@@ -40,6 +40,8 @@ class WaP:
 
         self.args = wap_arguments()
 
+        
+
         try:
             
             while True:
@@ -48,18 +50,17 @@ class WaP:
 
                 command = self.input.lstrip()
 
+                self.wap_current_args()
+ 
+                self.set_arguments()
+
                 if command in self.args:
                     
-                    self.WaP_input(self.input)
-
-                    
+                    self.wap_input(self.input)
 
                 else:
                     
                     self.terminal_input(self.input)
-
-                self.WaP_current_args()
-        
                 
 
         except KeyboardInterrupt:
@@ -117,7 +118,7 @@ class WaP:
         except Exception:
             print(self.colours['RED']+ self.colours['BLINK'] + 'Cannot set Option. Type help for more help')
 
-    def WaP_current_args(self):
+    def wap_current_args(self):
 
         self.arguments = {
         'url':self.url, 'password':self.password, 'user':self.user, 'output':self.output,
@@ -131,7 +132,7 @@ class WaP:
             }
 
 
-    def WaP_input(self,command):
+    def wap_input(self,command):
 
         '''
         Function to call WaP sepcific commands
@@ -143,20 +144,17 @@ class WaP:
         
             sys.exit(0)
 
-        elif command == 'reset all':
+        if command == 'reset all':
                     
             self.default_arguments()
 
 
-        elif self.input == 'options':
+        if self.input == 'options':
                     
                 self.current_output()
 
-        
-        elif 'set' in self.input: 
-            self.set_arguments()
 
-        elif self.input == 'get':
+        if self.input == 'get':
 
             try: 
                 self.http_request= HTTPRequests(self.arguments)
