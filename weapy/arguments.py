@@ -3,6 +3,8 @@ import argparse
 import sys
 import re
 
+from prompt_toolkit.key_binding.key_bindings import T
+
 #WeaPy modules
 from modules.prettify.colours import colors
 
@@ -56,7 +58,7 @@ def clean_dictionary(dictionary):
     return(dictionary)
 
 
-def clean_url(url):
+def clean_url(url,exit_on_error=True):
     
     colours = colors()
 
@@ -77,10 +79,15 @@ def clean_url(url):
     check = [check for check in tld if check in url]
 
     if len(check) == 0:
-
-        print(colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL')
         
-        sys.exit(1)
+        if exit_on_error ==True:
+
+            print(colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL'+ colours['RESET'])
+            
+            sys.exit(1)
+        
+        else:
+            raise Exception
     
     return(url)
 

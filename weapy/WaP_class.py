@@ -1,6 +1,7 @@
 #External modules
 import sys
 from prompt_toolkit import PromptSession
+from prompt_toolkit.shortcuts.prompt import E
 from prompt_toolkit.styles import Style
 from prompt_toolkit.history import FileHistory
 import os
@@ -10,11 +11,13 @@ import os
 from modules.prettify.colours import colors
 from modules.http_requests.http_request import HTTPRequests
 from weapy.arguments import clean_url, clean
-
+import modules.prettify.enum_output as enum
 
 def wap_arguments():
-    args = ['set', 'options','get',
-    'reset','reset all', 'quit']
+
+    args = [
+        'set', 'options','get','reset','reset all', 'quit','techno','javascript'
+        ]
 
     return args
 
@@ -40,8 +43,6 @@ class WaP:
 
         self.args = wap_arguments()
 
-        
-
         try:
             
             while True:
@@ -57,6 +58,8 @@ class WaP:
                 if command in self.args:
                     
                     self.wap_input(self.input)
+
+                    self.wap_enum()
 
                 else:
                     
@@ -86,7 +89,13 @@ class WaP:
             if 'set url' in self.input:
                 url = self.input.split()
                 self.url = url[2]
-                self.url = clean_url(self.url)
+
+                try: 
+                    self.url = clean_url(self.url,exit_on_error=False)
+                
+                except Exception:
+                    print(self.colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL'+ self.colours['RESET'])
+
 
             if 'set password' in self.input:
                 password = self.input.split()
@@ -100,9 +109,9 @@ class WaP:
                 header = self.input.split()
                 self.header = header[2]
                 self.header = clean(self.header)
-
                         
             if 'set output' in self.input:
+                
                 output = self.input.split()
 
                 if output[2].lower() =='yes' or output[2].lower() =='true':
@@ -114,6 +123,20 @@ class WaP:
 
                     if check.lower() == 'y':
                         self.output =True
+
+            if 'set verbose' in self.input:
+
+                verbose = self.input.split()
+
+                if verbose[2].lower() =='yes' or verbose[2].lower() =='true':
+                    self.verbose = True
+
+                else:
+                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't Understand your input Dave do you want to show verbose output? Y/N" + self.colours['RESET'])
+                    check=input()
+
+                    if check.lower() == 'y':
+                        self.verbose =True
                         
         except Exception:
             print(self.colours['RED']+ self.colours['BLINK'] + 'Cannot set Option. Type help for more help')
@@ -135,7 +158,7 @@ class WaP:
     def wap_input(self,command):
 
         '''
-        Function to call WaP sepcific commands
+        Function to call generic WaP  commands
         '''
 
         if command == 'quit':
@@ -153,7 +176,6 @@ class WaP:
                     
                 self.current_output()
 
-
         if self.input == 'get':
 
             try: 
@@ -167,7 +189,15 @@ class WaP:
                 else:
                         print(self.colours['RED'] + self.colours['BLINK'] + 'Unable to make get request' + self.colours['RESET'])
 
+    def wap_enum(self):
 
+        '''
+        Function to call WaP enum module functions
+        '''
+        
+        if self.input == 'techno':
+            
+            enum.webanalyzer_output(self.url)
 
     def terminal_input(self,command):
 
@@ -187,6 +217,7 @@ class WaP:
                     os.chdir(cd_input[1])
 
                 except Exception:
+
                     print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'])
                                         
         else:
@@ -200,6 +231,7 @@ class WaP:
     def current_output(self):
 
         print('\n')
+        
         print('',self.colours['PURPLE'] + self.colours['BOLD']+ '-'*200,'\n', "\t Option \t\t\t\tvalue \t\t\t\t\t\t\tHelp",'\n','-'*200,'\n' + self.colours['RESET'])
         
         for key , val in self.arguments.items():
