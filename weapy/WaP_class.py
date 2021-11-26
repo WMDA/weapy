@@ -56,13 +56,13 @@ class WaP:
 
                 if command in self.args:
                     
-                    self.wap_input(self.input)
+                    self.wap_input(command)
 
                     self.wap_enum()
 
                 else:
                     
-                    self.terminal_input(self.input)
+                    self.terminal_input(command)
                 
 
         except KeyboardInterrupt:
