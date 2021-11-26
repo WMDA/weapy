@@ -109,6 +109,12 @@ class WaP:
                 header = self.input.split()
                 self.header = header[2]
                 self.header = clean(self.header)
+
+
+            if 'set cookie' in self.input:
+                cookie = self.input.split()
+                self.cookie = cookie[2]
+                self.cookie = clean(self.cookie)
                         
             if 'set output' in self.input:
                 
