@@ -127,6 +127,7 @@ def arguments():
     args.update({'url':url, 'header':header, 'cookie':cookie})
 
     if args['debug'] == True:
+        
         print(args)
 
     return(args)

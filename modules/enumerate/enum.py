@@ -139,23 +139,40 @@ def css_links(text):
 
 
 def find_input_forms(request):
+
     soup = bs4_parse(request)
+    
     forms = soup.find('form')
+    
     return(forms)
 
 def get_form_details(form):
+    
     details = {}
+    
     # get the form action (requested URL)
+    
     action = form.get("action")
+    
     method = form.attrs.get("method", "get")
+    
     inputs = []
+    
     for input_tag in form.find_all("input"):
+    
         input_type = input_tag.attrs.get("type", "text")
+    
         input_name = input_tag.attrs.get("name")
+    
         input_value =input_tag.attrs.get("value", "")
+    
         inputs.append({"type": input_type, "name": input_name, "value": input_value})
+    
     details["action"] = action
+    
     details["method"] = method
+    
     details["inputs"] = inputs
+    
     return (details)
     

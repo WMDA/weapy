@@ -1,7 +1,6 @@
 #External modules
 import sys
 from prompt_toolkit import PromptSession
-from prompt_toolkit.shortcuts.prompt import E
 from prompt_toolkit.styles import Style
 from prompt_toolkit.history import FileHistory
 import os
@@ -16,7 +15,7 @@ import modules.prettify.enum_output as enum
 def wap_arguments():
 
     args = [
-        'set', 'options','get','reset','reset all', 'quit','techno','javascript'
+        'set', 'options','get','reset','reset all', 'quit','techno','javascript', 'post'
         ]
 
     return args
@@ -194,6 +193,15 @@ class WaP:
 
                 else:
                         print(self.colours['RED'] + self.colours['BLINK'] + 'Unable to make get request' + self.colours['RESET'])
+
+        if self.input == 'post':
+            
+            try:
+                self.http_request.post()
+
+            except Exception:
+                print(self.colours['RED'] + self.colours['BLINK'] + 'I cannot do that Dave, make sure you have made a GET request first' + self.colours['RESET'])
+
 
     def wap_enum(self):
 
