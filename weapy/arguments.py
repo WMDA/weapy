@@ -74,7 +74,7 @@ def clean_url(url,exit_on_error=True):
     if 'http' not in url:
         url = 'http://' + url
     
-    tld = ['.com','.co.uk','.edu','.io','.ac.uk','.html','.org','.app','.amazon']
+    tld = ['.com','.co.uk','.edu','.io','.ac.uk','.html','.org','.app','.amazon','level1','level2','level3','level4','level5','level6']
 
     check = [check for check in tld if check in url]
 
