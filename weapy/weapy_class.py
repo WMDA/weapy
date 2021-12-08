@@ -62,7 +62,7 @@ class WeaPy:
 
         if self.data != False:
 
-            self.http_request.post()
+            self.http_request.post(self.url)
 
         
 

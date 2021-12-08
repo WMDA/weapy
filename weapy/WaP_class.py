@@ -197,7 +197,7 @@ class WaP:
         if self.input == 'post':
             
             try:
-                self.http_request.post()
+                self.http_request.post(self.url)
 
             except Exception:
                 print(self.colours['RED'] + self.colours['BLINK'] + 'I cannot do that Dave, make sure you have made a GET request first' + self.colours['RESET'])

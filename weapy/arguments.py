@@ -68,7 +68,9 @@ def clean_url(url,exit_on_error=True):
             url = 'www.' + url
 
     if 'www.http' in url:
+
         print(colours['WARNING'] + f"Weird {url}, this won't work" + colours['RESET'])
+        
         sys.exit(1)
 
     if 'http' not in url:
