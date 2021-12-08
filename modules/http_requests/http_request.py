@@ -2,6 +2,7 @@ import requests
 import sys
 
 import modules.prettify.enum_output as enum
+import modules.enumerate.enum as enumerate
 from modules.prettify.colours import colors
 
 
@@ -79,7 +80,7 @@ class HTTPRequests:
 
     def post(self,url):
         
-        form_data = enum.input_forms(self.req.text)
+        form_data = enumerate.input_forms(self.req.text)
         
         data ={}
 

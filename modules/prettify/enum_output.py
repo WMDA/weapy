@@ -104,7 +104,6 @@ def webanalyzer_output(url):
 
     techno (list of dictionary items): Coloured list of dictionary items of backend category, name and version
 
-
     '''
         
     
@@ -210,32 +209,3 @@ def css_output(text):
         except:
             print(css)
             print('Unable to open page')
-
-def input_forms(request):
-
-    '''
-    Work in progress. Functionally works however function may need to be split up.
-    '''
-        
-    colours =colors()
-        
-    forms = enum.find_input_forms(request)
-    form_details = enum.get_form_details(forms)
-
-    for val in form_details['inputs']:
-        
-        if val['type'] !='submit':
-        
-            if val['value'] =='':
-        
-                print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
-        
-                value=input()
-        
-                val['value'] = value
-
-        elif val['type'] == 'submit':
-            if val['value'] =='':
-                val['value'] ='submit'
-        
-    return(form_details)

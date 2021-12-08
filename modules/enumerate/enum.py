@@ -175,4 +175,33 @@ def get_form_details(form):
     details["inputs"] = inputs
     
     return (details)
+
+def input_forms(request):
+
+    '''
+    Work in progress. Functionally works however function may need to be split up.
+    '''
+        
+    colours =colors()
+        
+    forms = find_input_forms(request)
+    form_details = get_form_details(forms)
+
+    for val in form_details['inputs']:
+        
+        if val['type'] !='submit':
+        
+            if val['value'] =='':
+        
+                print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
+        
+                value=input()
+        
+                val['value'] = value
+
+        elif val['type'] == 'submit':
+            if val['value'] =='':
+                val['value'] ='submit'
+        
+    return(form_details)
     

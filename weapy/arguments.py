@@ -37,6 +37,8 @@ def set_arguments():
     option.add_argument('-H','--header',dest = 'header', help = 'set modified header. Usage is python dict ({name:value})')
 
     option.add_argument('-X','--post',dest = 'post', help = 'Makes a post request.', action='store_true')
+
+    option.add_argument('--xss', dest = 'xss', help = 'Scans website for XSS vulns.', action='store_true')
     
     option.add_argument('--debug',dest = 'debug', help = 'prints out args dictionary to help with development', action='store_true')
 
