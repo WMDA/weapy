@@ -98,7 +98,7 @@ class HTTPRequests:
 
                 else:
                     print(self.colours['WARNING'] + 'Unable to make Post request'  + self.colours['RESET'])
-                    
+
                     sys.exit(1)
                 
             except Exception:
@@ -125,3 +125,6 @@ class HTTPRequests:
                 print(self.colours['WARNING'] + 'Unable to Post!!!' + self.colours['RESET'])
 
                 sys.exit(1)
+
+        else:
+            print(self.colours['WARNING'] + "I Don't Understand Dave" + self.colours['RESET'])
