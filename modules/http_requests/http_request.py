@@ -112,7 +112,7 @@ class HTTPRequests:
                 self.req_get = requests.get(self.url, data = data, auth = (self.username, self.password))
                 
                 if self.req_get.status_code == 200:
-                    print(enum.bs4_output(self.req_post.text))
+                    print(enum.bs4_output(self.req_get.text))
 
                 else:
                     print(self.colours['WARNING'] + 'Unable to make request'  + self.colours['RESET'])
