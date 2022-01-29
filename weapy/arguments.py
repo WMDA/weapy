@@ -17,16 +17,16 @@ def set_arguments():
     option.add_argument('-j','--javascript', dest='javascript', help='Prints javascript source code to terminal screen', action='store_true')
     option.add_argument('--css', dest='css', help='Prints css source code to terminal screen', action='store_true')
     option.add_argument('-s','--search', dest='search', help='Searches for links and directories in source code', action='store_true')
-    option.add_argument('--coments', dest='comments', help='Searches for comments in source code', action='store_true')
-    option.add_argument('-A','--all', dest='all', help='Does -s, -w ,-v --comments', action='store_true')
+    option.add_argument('--comments', dest='comments', help='Searches for comments in source code', action='store_true')
+    option.add_argument('-A','--all', dest='all', help='Does -o, -H, -s, -w , -v --comments', action='store_true')
     option.add_argument('-w','--webanalyser', dest='webanal', help='Analyses web technology using Wappalyzer',action = 'store_true')
-    option.add_argument('-v','--verbose', dest = 'verbose', help = 'prints out cookie and header information', action= 'store_true')
-    option.add_argument('--ctf', dest = 'ctf', help = 'for ctfs, searches source code for comments, passwords/flags', action= 'store_true')
-    option.add_argument('-c','--cookie', dest = 'cookie', help = 'set cookie name and value. Usage is python dict ({name:value})')
-    option.add_argument('-H','--header', dest = 'header', help = 'set modified header. Usage is python dict ({name:value})')
-    option.add_argument('-X','--post', dest = 'post', help = 'Makes a post request.', action='store_true')
-    option.add_argument('--xss', dest = 'xss', help = 'Scans website for XSS vulns.', action='store_true')
-    option.add_argument('--debug',dest = 'debug', help = 'prints out args dictionary to help with development', action='store_true')
+    option.add_argument('-v','--verbose', dest='verbose', help='prints out cookie and header information', action= 'store_true')
+    option.add_argument('--ctf', dest = 'ctf', help='for ctfs, searches source code for comments, passwords/flags', action= 'store_true')
+    option.add_argument('-c','--cookie', dest='cookie', help='set cookie name and value. Usage is python dict ({name:value})')
+    option.add_argument('-H','--header', dest='header', help='set modified header. Usage is python dict ({name:value})')
+    option.add_argument('-X','--post', dest='post', help='Makes a post request.', action='store_true')
+    option.add_argument('--xss', dest='xss', help='Scans website for XSS vulns.', action='store_true')
+    option.add_argument('--debug', dest='debug', help='prints out args dictionary to help with development', action='store_true')
 
     arg = vars(option.parse_args())
     
@@ -103,5 +103,9 @@ def arguments():
 
     if args['debug'] == True:
         print(args)
+
+    if args['all'] == True:
+        args['output'] = True
+        args['verbose'] = True
 
     return args
