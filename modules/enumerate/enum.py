@@ -1,6 +1,8 @@
 #External Modules
 from bs4 import BeautifulSoup
 import re
+from Wappalyzer import Wappalyzer, WebPage
+import warnings
 
 #WeaPy Modules
 from modules.prettify.colours import colors
@@ -64,9 +66,6 @@ def file_search(text):
 
 def webanalyzer(url):
 
-    from Wappalyzer import Wappalyzer, WebPage
-        
-    import warnings
         
     # Wappalyzer throws up unbalanced parentheses warnings
     warnings.filterwarnings('ignore')
@@ -89,16 +88,10 @@ def webanalyzer(url):
 
     return technology
 
-def ctf_mode(website_code):
+def passwords(website_code):
 
     colours = colors()
     passwords = re.findall('password[\w\s.].*', website_code)
-    further_search_text = re.sub(r'<.*>', '', website_code)
-
-    #HTTP/HTTPS links will always come back as a false positive. So needs to be sub out
-    sub_out_http = re.sub(r'http.*:','', further_search_text)
-    further_search = re.findall(r'.*:.*', sub_out_http)
-    passwords = passwords + further_search
     
     if len(passwords) >0:
         print(colours['BLINK'] + colours['YELLOW'] + colours['BOLD'] +
@@ -108,6 +101,14 @@ def ctf_mode(website_code):
     
     else:
         print(colours['WARNING'] + 'NO PASSWORDS FOUND')
+
+def comments(website_code):
+
+    colours = colors()
+    comments = re.findall(r'<!.*>', website_code)
+    print(colours['CYAN']+ '\nFound Comments on the page' + colours['RESET'])
+    print(colours['GREEN'] + '\n', *comments, sep='\n')
+    print(colours['RESET'] + '\n') 
 
 def javascript_links(text):
     

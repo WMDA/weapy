@@ -5,6 +5,7 @@ import sys
 # WeaPy modules
 from modules.prettify.colours import colors
 import modules.prettify.enum_output as enum
+from modules.enumerate.enum import comments
 from modules.http_requests.http_request import HTTPRequests
 from modules.vulns.xss import xss_scanner
 
@@ -60,6 +61,15 @@ class WeaPy:
 
         if self.xss == True:
             xss_scanner(args)
+        
+        if self.all == True:
+            enum.webanalyzer_output(self.url)
+            enum.search_page(self.http_request.req.text)
+            comments(self.http_request.req.text)
+
+        if self.comments == True:
+            comments(self.http_request.req.text)
+
 
         
 
@@ -92,4 +102,6 @@ class WeaPy:
         self.css = args['css']
         self.data = args['post']
         self.xss = args['xss']
+        self.all = args['all']
+        self.comments = args['comments']
         

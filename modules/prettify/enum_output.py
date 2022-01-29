@@ -112,27 +112,8 @@ def header_output(website_headers):
             print(header_key, header_value)
 
 def ctf_mode(website_code):
-
-    '''
-    Work in progress. May move from enumerate modules. Functionally Works but function may need to be split up
-    '''
-    colours = colors()
-    passwords = re.findall('password[\w\s.].*', website_code)
-    further_search_text = re.sub(r'<.*>','',website_code)
-
-    #HTTP/HTTPS links will always come back as a false positive. So needs to be sub out
-    sub_out_http = re.sub(r'http.*:','',further_search_text)
-    further_search = re.findall(r'.*:.*', sub_out_http)
-    passwords = passwords + further_search
-    
-    if len(passwords) >0:
-        print(colours['BLINK'] + colours['YELLOW'] + colours['BOLD'] +
-        'POTENTIAL PASSWORDS FOUND!!' + colours['RESET'] + colours['BOLD'])
-         
-        print(*passwords, sep='\n')
-    
-    else:
-        print(colours['RED'] + 'NO PASSWORDS FOUND' + colours['RESET'])
+    enum.passwords(website_code)
+    enum.comments(website_code)
 
 
 def javascript_output(text):

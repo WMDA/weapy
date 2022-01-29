@@ -1,4 +1,4 @@
 prompt_toolkit==3.0.19
 requests==2.22.0
 beautifulsoup4==4.10.0
-Wappalyzer==1.0
+python-Wappalyzer==0.3.1
