@@ -34,41 +34,28 @@ class WaP:
             'colon':'#0000ff'})
 
         message =[('class:name', 'WaP@WeaPy'),
-        ('class:colon', ': ')]
+                  ('class:colon', ': ')]
 
         session = PromptSession(history=FileHistory('./.WaPhistory'))
-
         self.default_args =self.default_arguments()
-
         self.args = wap_arguments()
 
         try:
-            
             while True:
-
                 self.input = session.prompt(message, style=col)
-
                 command = self.input.lstrip()
-
                 self.wap_current_args()
- 
                 self.set_arguments()
 
                 if command in self.args:
-                    
                     self.wap_input(command)
-
                     self.wap_enum()
-
                 else:
-                    
                     self.terminal_input(command)
                 
 
         except KeyboardInterrupt:
-             
              print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
-             
              sys.exit(0)
 
     def default_arguments(self):
@@ -84,16 +71,14 @@ class WaP:
     def set_arguments(self):
 
         try:
-        
             if 'set url' in self.input:
                 url = self.input.split()
                 self.url = url[2]
 
                 try: 
-                    self.url = clean_url(self.url,exit_on_error=False)
-                
+                    self.url = clean_url(self.url)
                 except Exception:
-                    print(self.colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL'+ self.colours['RESET'])
+                    print(self.colours['WARNING'] + 'No known Top Level Domain specified please specify in the URL' + self.colours['RESET'])
 
 
             if 'set password' in self.input:
@@ -119,32 +104,33 @@ class WaP:
                 
                 output = self.input.split()
 
-                if output[2].lower() =='yes' or output[2].lower() =='true':
+                if output[2].lower() =='yes' or output[2].lower() == 'true':
                     self.output = True
 
                 else:
-                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't Understand your input Dave do you want to show HTML output? Y/N" + self.colours['RESET'])
+                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't Understand your input Dave do you want to show HTML output? Y/N" 
+                          + self.colours['RESET'])
                     check=input()
 
                     if check.lower() == 'y':
                         self.output =True
 
             if 'set verbose' in self.input:
-
                 verbose = self.input.split()
 
-                if verbose[2].lower() =='yes' or verbose[2].lower() =='true':
+                if verbose[2].lower() == 'yes' or verbose[2].lower() == 'true':
                     self.verbose = True
 
                 else:
-                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't Understand your input Dave do you want to show verbose output? Y/N" + self.colours['RESET'])
+                    print(self.colours['RED'] + self.colours['BOLD'] + "I can't Understand your input Dave do you want to show verbose output? Y/N" 
+                          + self.colours['RESET'])
                     check=input()
 
                     if check.lower() == 'y':
                         self.verbose =True
                         
         except Exception:
-            print(self.colours['RED']+ self.colours['BLINK'] + 'Cannot set Option. Type help for more help')
+            print(self.colours['RED'] + self.colours['BLINK'] + 'Cannot set Option. Type help for more help')
 
     def wap_current_args(self):
 
@@ -167,22 +153,16 @@ class WaP:
         '''
 
         if command == 'quit':
-            
             print(self.colours['LIGHT_GREEN'] + '\nBYE!!' + self.colours['RESET'])
-        
             sys.exit(0)
 
         if command == 'reset all':
-                    
             self.default_arguments()
 
-
-        if self.input == 'options':
-                    
+        if self.input == 'options':                    
                 self.current_output()
 
         if self.input == 'get':
-
             try: 
                 self.http_request= HTTPRequests(self.arguments)
 
@@ -202,15 +182,13 @@ class WaP:
             except Exception:
                 print(self.colours['RED'] + self.colours['BLINK'] + 'I cannot do that Dave, make sure you have made a GET request first' + self.colours['RESET'])
 
-
     def wap_enum(self):
 
         '''
         Function to call WaP enum module functions
         '''
         
-        if self.input == 'techno':
-            
+        if self.input == 'techno':            
             enum.webanalyzer_output(self.url)
 
     def terminal_input(self,command):
@@ -222,20 +200,16 @@ class WaP:
         '''
 
         if 'cd' in command:
-                    
             if command != 'cd':
-
                 cd_input= command.split()
                    
                 try:
                     os.chdir(cd_input[1])
 
                 except Exception:
-
                     print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'])
                                         
         else:
-                
             try:
                 os.system(command)
                     
@@ -243,21 +217,17 @@ class WaP:
                     print(self.colours['RED'] + self.colours['BOLD'] + "I can't do that Dave"  + self.colours['RESET'] + self.colours['RESET'])
 
     def current_output(self):
-
         print('\n')
-        
         print('',self.colours['PURPLE'] + self.colours['BOLD']+ '-'*200,'\n', "\t Option \t\t\t\tvalue \t\t\t\t\t\t\tHelp",'\n','-'*200,'\n' + self.colours['RESET'])
-        
+    
         for key , val in self.arguments.items():
             if len(key) <= 6:
                 print('\t', str(key) + "\t\t\t\t\t" + str(val) + "\t\t\t\t\t\t\t" + self.help_list[key])
             else:
                 print('\t', str(key) + "\t\t\t\t" + str(val) + "\t\t\t\t\t\t\t" + self.help_list[key])
-
         print('\n')
 
     def reset(self,input):
-
         if 'url' in input:
             self.url = False
         elif 'password' in input:
@@ -274,4 +244,3 @@ class WaP:
             self.cookie = False 
         else:
             print(self.colours['RED'] + self.colours['BOLD']+ 'I cannot understand what you are saying Dave'+ self.colours['RESET'])
-

@@ -6,6 +6,7 @@ import sys
 from modules.prettify.colours import colors
 import modules.prettify.enum_output as enum
 from modules.http_requests.http_request import HTTPRequests
+from modules.vulns.xss import xss_scanner
 
 
 class WeaPy:
@@ -32,7 +33,6 @@ class WeaPy:
         self.args(args)
 
         try:
-            
             self.http_request= HTTPRequests(args)
 
         except Exception:
@@ -41,28 +41,25 @@ class WeaPy:
         self.colours = colors()
         
         if self.search == True:
-
             enum.search_page(self.http_request.req.text)
 
         if self.webanal == True:
-
             enum.webanalyzer_output(self.url)
 
         if self.ctf == True:    
-
             enum.ctf_mode(self.http_request.req.text)
 
         if self.javascript ==True:
-
             enum.javascript_output(self.http_request.req.text)
 
         if self.css ==True:
-
             enum.css_output(self.http_request.req.text)
 
         if self.data != False:
-
             self.http_request.post(self.url)
+
+        if self.xss == True:
+            xss_scanner(args)
 
         
 
@@ -82,28 +79,17 @@ class WeaPy:
         '''
         
         self.url = args['url']
-        
         self.password = args['password']
-        
         self.username = args['user']
-        
         self.output = args['output']
-        
         self.search = args['search']
-
         self.webanal = args['webanal']
-
         self.header = args['header']
-
         self.ctf = args['ctf']
-
         self.cookie = args['cookie']
-
         self.verbose = args['verbose']
-
         self.javascript = args['javascript']
-
         self.css = args['css']
-
         self.data = args['post']
+        self.xss = args['xss']
         

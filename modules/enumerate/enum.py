@@ -15,51 +15,44 @@ def bs4_parse(request):
     Replaces unecessary <br /> tags with spaces and unecessary & tags with < or >
     '''
 
-    line_break= re.sub(r'<br />','\n',request)
-    tag_left= re.sub(r'&lt;','<',line_break)
-    tag_right= re.sub(r'&gt;','>',tag_left)
-    output= re.sub(r'&nbsp;',' ',tag_right)
+    line_break= re.sub(r'<br />', '\n', request)
+    tag_left= re.sub(r'&lt;', '<', line_break)
+    tag_right= re.sub(r'&gt;', '>', tag_left)
+    output= re.sub(r'&nbsp;', ' ', tag_right)
 
     '''
     Uses beautiful soup to prettify the output
     '''
     soup = BeautifulSoup(output, features="lxml")
     
-    return (soup)  
+    return soup
 
 def dirs_search(text):
 
-    remove_ending_tags = re.sub(r'</.*?>','',text)
-
+    remove_ending_tags = re.sub(r'</.*?>', '', text)
     dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
-
     filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
-
-    filter_links = [dir for dir in filter_no_dir if '.' not in dir ]
-
+    filter_links = [dir for dir in filter_no_dir if '.' not in dir]
     dirs = list(set(filter_links))
-        
-    return(dirs)
+
+    return dirs
 
 def links_search(text): 
 
    soup = bs4_parse(text)
-
    page = soup.prettify()
-   
-   html_links = re.findall(r'(http.*//.*?[^\'"><]+)',page)
+   html_links = re.findall(r'(http.*//.*?[^\'"><]+)', page)
 
-   return(html_links)
+   return html_links
 
 
 def file_search(text):
     
-    file_type =['gif','txt','jpeg','html']
-    
+    file_type =['gif','txt','jpeg','html','py']
     files=[]
     
     for format in file_type:     
-        file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format),text)
+        file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format), text)
         
         for file in file_list:
             if file not in files:
@@ -77,7 +70,6 @@ def webanalyzer(url):
         
     # Wappalyzer throws up unbalanced parentheses warnings
     warnings.filterwarnings('ignore')
-        
     wappalyzer = Wappalyzer.latest()
         
     # Create webpage
@@ -95,21 +87,17 @@ def webanalyzer(url):
             if techno_dict not in technology:
                 technology.append(techno_dict)
 
-    return(technology)
+    return technology
 
 def ctf_mode(website_code):
 
     colours = colors()
-    
     passwords = re.findall('password[\w\s.].*', website_code)
-    
-    further_search_text = re.sub(r'<.*>','',website_code)
+    further_search_text = re.sub(r'<.*>', '', website_code)
 
     #HTTP/HTTPS links will always come back as a false positive. So needs to be sub out
-    sub_out_http = re.sub(r'http.*:','',further_search_text)
-
+    sub_out_http = re.sub(r'http.*:','', further_search_text)
     further_search = re.findall(r'.*:.*', sub_out_http)
-
     passwords = passwords + further_search
     
     if len(passwords) >0:
@@ -124,84 +112,66 @@ def ctf_mode(website_code):
 def javascript_links(text):
     
     links= links_search(text)
-
     java_script = [js for js in links if '.js' in js]
-
-    return(java_script)
+    return java_script
 
 def css_links(text):
         
     links= links_search(text)
-
     css = [css for css in links if '.css' in css]
-
-    return(css)
+    return css
 
 
 def find_input_forms(request):
 
     soup = bs4_parse(request)
-    
     forms = soup.find('form')
-    
-    return(forms)
+    return forms
 
 def get_form_details(form):
     
     details = {}
-    
     # get the form action (requested URL)
-    
     action = form.get("action")
-    
     method = form.attrs.get("method", "get")
     
     inputs = []
-    
     for input_tag in form.find_all("input"):
-    
         input_type = input_tag.attrs.get("type", "text")
-    
         input_name = input_tag.attrs.get("name")
-    
         input_value =input_tag.attrs.get("value", "")
-    
         inputs.append({"type": input_type, "name": input_name, "value": input_value})
     
     details["action"] = action
-    
     details["method"] = method
-    
     details["inputs"] = inputs
-    
-    return (details)
 
-def input_forms(request):
+    return details
+
+def input_forms(request, *submit_value, vulns=False):
 
     '''
     Work in progress. Functionally works however function may need to be split up.
     '''
         
     colours =colors()
-        
     forms = find_input_forms(request)
     form_details = get_form_details(forms)
 
     for val in form_details['inputs']:
-        
-        if val['type'] !='submit':
-        
-            if val['value'] =='':
-        
-                print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
-        
-                value=input()
-        
+        if val['type'] != 'submit':
+            if val['value'] == '':
+                if vulns == False:
+                    print(colours['YELLOW'] + f'>> Enter value for {val["name"]}' + colours['RESET'])
+                    value=input()
+                
+                else:
+                    value = submit_value
+
                 val['value'] = value
 
         elif val['type'] == 'submit':
-            if val['value'] =='':
-                val['value'] ='submit'
+            if val['value'] == '':
+                val['value'] == 'submit'
         
-    return(form_details)
-    
+    return form_details

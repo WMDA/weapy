@@ -28,16 +28,12 @@ def bs4_output(request):
     '''
 
     colours = colors()
-
     soup= enum.bs4_parse(request)
-
     pretty = soup.prettify()
-
-    color_beg= re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'],pretty)
-       
+    color_beg= re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'], pretty)
     final_output= re.sub(r'>', colours['PURPLE'] + '> '+ colours['RESET'], color_beg)
       
-    return(final_output)
+    return final_output
 
     
 def search_page(text):
@@ -60,32 +56,19 @@ def search_page(text):
     '''
         
     colours = colors()
-
     print('\nSearching for Files Dirs and Links on page\n')
-
     files = enum.file_search(text)
-
     files_in_page = [colours['LIGHT_CYAN'] + file + colours['RESET'] for file in files]
-
     dirs = enum.dirs_search(text)
-        
     output_dirs = [colours['LIGHT_GREEN'] + dir + colours['RESET'] for dir in dirs]
-      
     links = enum.links_search(text)
-        
     output_links = [colours['LIGHT_PURPLE'] + link.replace('"','') + colours['RESET'] for link in links]
-
     print(colours['PURPLE'] + colours['BOLD'] + '\nFiles found in page:\n' + colours['RESET'])
-
-    print(*files_in_page,sep='\n')
-
+    print(*files_in_page, sep='\n')
     print(colours['YELLOW'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
-
-    print(*output_dirs,sep='\n')
-
-    print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n'+  colours['RESET'])
-
-    print(*output_links,sep='\n')
+    print(*output_dirs, sep='\n')
+    print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n' + colours['RESET'])
+    print(*output_links, sep='\n')
     
 
 def webanalyzer_output(url):
@@ -108,13 +91,11 @@ def webanalyzer_output(url):
         
     
     webanalyser = enum.webanalyzer(url)
-    
     colours = colors()
-    
     print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['BLUE'])
     
     for techno in webanalyser:
-        print(*techno['Categories'],':', techno['name'],*techno['version'])
+        print(*techno['Categories'], ':', techno['name'], *techno['version'])
 
     print('\n' + colours['RESET'])
 
@@ -122,14 +103,11 @@ def webanalyzer_output(url):
 def header_output(website_headers):
 
     colours = colors()
-
     print(colours['PURPLE'] + colours['BOLD'] + '\nHeader and Set Cookie info\n' + colours['RESET'])
 
     for header_key, header_value in website_headers.items():
-        
         if r'Set-Cookie' in header_key:
-            print(colours['BLINK'] + colours['YELLOW'] + header_key + colours['RESET'], colours['PURPLE'] + header_value + colours['RESET'])
-
+            print(colours['YELLOW'] + header_key + colours['RESET'], colours['PURPLE'] + header_value + colours['RESET'])
         else:
             print(header_key, header_value)
 
@@ -139,16 +117,12 @@ def ctf_mode(website_code):
     Work in progress. May move from enumerate modules. Functionally Works but function may need to be split up
     '''
     colours = colors()
-    
     passwords = re.findall('password[\w\s.].*', website_code)
-    
     further_search_text = re.sub(r'<.*>','',website_code)
 
     #HTTP/HTTPS links will always come back as a false positive. So needs to be sub out
     sub_out_http = re.sub(r'http.*:','',further_search_text)
-
     further_search = re.findall(r'.*:.*', sub_out_http)
-
     passwords = passwords + further_search
     
     if len(passwords) >0:
@@ -169,16 +143,13 @@ def javascript_output(text):
     '''
 
     colours = colors
-
     js_links= enum.javascript_links(text)
 
     for js in js_links:
-        js = re.sub(r'"','',js)
+        js = re.sub(r'"', '', js)
 
         try:
-            
             js_page = requests.get(js)
-
             print(js)
             print(js_page.text)
 
@@ -193,15 +164,12 @@ def css_output(text):
     Needs further work
     '''
 
-
-
     css_link= enum.css_links(text)
 
     for css in css_link:
-        css = re.sub(r'"','',css)
+        css = re.sub(r'"', '', css)
 
         try:
-            
             css_page = requests.get(css)
             print(css)
             print(css_page.text)
