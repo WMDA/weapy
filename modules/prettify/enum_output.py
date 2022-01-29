@@ -112,6 +112,7 @@ def header_output(website_headers):
             print(header_key, header_value)
 
 def ctf_mode(website_code):
+    
     enum.passwords(website_code)
     enum.comments(website_code)
 

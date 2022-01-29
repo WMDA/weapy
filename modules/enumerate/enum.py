@@ -1,4 +1,5 @@
 #External Modules
+from distutils.command.upload import upload
 from bs4 import BeautifulSoup
 import re
 from Wappalyzer import Wappalyzer, WebPage
@@ -32,7 +33,20 @@ def bs4_parse(request):
 def dirs_search(text):
 
     remove_ending_tags = re.sub(r'</.*?>', '', text)
+    remove_html_links = re.sub(r'(http.*//.*?[^\'"><]+)','', remove_ending_tags)
     dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
+    
+    
+    further_search = re.findall(r'.*?/.*?', remove_html_links)
+    
+    directories = ['files', 'file', 'uploads']
+
+    further_dir = [dir for dir in further_search if dir in directories]
+
+
+
+
+
     filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
     filter_links = [dir for dir in filter_no_dir if '.' not in dir]
     dirs = list(set(filter_links))
@@ -50,8 +64,8 @@ def links_search(text):
 
 def file_search(text):
     
-    file_type =['gif','txt','jpeg','html','py']
-    files=[]
+    file_type = ['gif','txt','jpeg','html','py','png']
+    files = []
     
     for format in file_type:     
         file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format), text)
@@ -61,7 +75,7 @@ def file_search(text):
                 if '.'in file:
                     files.append(file)
 
-    return(files)
+    return files
 
 
 def webanalyzer(url):

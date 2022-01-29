@@ -1,4 +1,5 @@
 # External Modules 
+from logging import exception
 import requests
 import sys
 
@@ -63,7 +64,12 @@ class WeaPy:
             xss_scanner(args)
         
         if self.all == True:
-            enum.webanalyzer_output(self.url)
+            try:
+                enum.webanalyzer_output(self.url)
+
+            except: 
+                print(self.colours['RED'] + '\nUnable to determine backend technology. Most likely a time out issue'+ self.colours['RESET'])
+
             enum.search_page(self.http_request.req.text)
             comments(self.http_request.req.text)
 
