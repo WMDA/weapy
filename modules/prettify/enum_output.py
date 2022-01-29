@@ -57,22 +57,22 @@ def search_page(text):
         
     colours = colors()
     files = enum.file_search(text)
-    files_in_page = [colours['LIGHT_CYAN'] + file + colours['RESET'] for file in files]
+    files_in_page = [colours['BLUE'] + file + colours['RESET'] for file in files]
     output_dirs = enum.dirs_search(text)
     links = enum.links_search(text)
-    output_links = [colours['LIGHT_PURPLE'] + link.replace('"','') + colours['RESET'] for link in links]
-    print(colours['PURPLE'] + colours['BOLD'] + '\nFiles found in page:\n' + colours['RESET'])
+    output_links = [colours['BLUE'] + link.replace('"','') + colours['RESET'] for link in links]
+    
+    print(colours['LIGHT_CYAN'] + colours['BOLD'] + '\nFiles found in page:\n' + colours['RESET'])
     print(*files_in_page, sep='\n')
-
-    print(colours['YELLOW'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
+    print(colours['LIGHT_CYAN'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
     
     common_dirs = ['/js','/wechall', '/jquery', '/css']
     
     for dir in output_dirs:
         if dir not in common_dirs:
-            print(colours['RED'] + dir + colours['RESET'])
-        else:
             print(colours['LIGHT_GREEN'] + dir + colours['RESET'])
+        else:
+            print(colours['BLUE'] + dir + colours['RESET'])
 
     print(colours['BLUE'] + colours['BOLD'] + '\nLinks found:\n' + colours['RESET'])
     print(*output_links, sep='\n')

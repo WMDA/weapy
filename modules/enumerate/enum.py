@@ -119,7 +119,7 @@ def comments(website_code):
     colours = colors()
     comments = re.findall(r'<!.*>', website_code)
     print(colours['CYAN']+ '\nFound Comments on the page' + colours['RESET'])
-    print(colours['GREEN'] + '\n', *comments, sep='\n')
+    print(colours['LIGHT_GREEN'] + '\n', *comments, sep='\n')
     print(colours['RESET'] + '\n') 
 
 def javascript_links(text):
