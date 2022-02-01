@@ -66,7 +66,7 @@ def search_page(text):
     print(*files_in_page, sep='\n')
     print(colours['LIGHT_CYAN'] + colours['BOLD'] + '\nDirs found in page:\n' + colours['RESET'])
     
-    common_dirs = ['/js','/wechall', '/jquery', '/css','/html']
+    common_dirs = ['/js','/wechall', '/jquery', '/css','/html','/W3C','/DTD','/EN']
     
     for dir in output_dirs:
         if dir not in common_dirs:

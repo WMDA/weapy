@@ -42,7 +42,8 @@ def dirs_search(text):
     
     common_dirs = ['files','uploads', 'images']
     strip = [dirs.lstrip('/"').rstrip('/') for dirs in further_search_results]
-    results = [dirs for dirs in strip if dirs in common_dirs]
+    remove_tabs = [dirs.lstrip('\t"').rstrip('\t') for dirs in strip ]
+    results = [dirs for dirs in remove_tabs if dirs in common_dirs]
 
     filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
     filter_links = [dir for dir in filter_no_dir if '.' not in dir]
@@ -66,7 +67,7 @@ def file_search(text):
     files = []
     
     for format in file_type:     
-        file_list = re.findall(r'[A-Za-z0-9-]*.{}'.format(format), text)
+        file_list = re.findall(r'[A-Za-z0-9-_]*.{}'.format(format), text)
         
         for file in file_list:
             if file not in files:
