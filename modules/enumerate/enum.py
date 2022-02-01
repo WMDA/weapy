@@ -40,7 +40,7 @@ def dirs_search(text):
     further_search = re.findall(r'.*?/.*?', remove_html_links)
     further_search_results = [re.sub(r'<.*?=','', dir) for dir in further_search]
     
-    common_dirs =['files','uploads', 'images']
+    common_dirs = ['files','uploads', 'images']
     strip = [dirs.lstrip('/"').rstrip('/') for dirs in further_search_results]
     results = [dirs for dirs in strip if dirs in common_dirs]
 
