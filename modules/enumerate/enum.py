@@ -34,7 +34,7 @@ def dirs_search(text):
 
     remove_ending_tags = re.sub(r'</.*?>', '', text)
     remove_html_links = re.sub(r'(http.*//.*?[^\'"><]+)','', remove_ending_tags)
-    dir_list = re.findall(r'/[A-Za-z0-9\.]*', remove_ending_tags)
+    dir_list = re.findall(r'/[A-Za-z0-9_\.]*', remove_ending_tags)
     
     
     further_search = re.findall(r'.*?/.*?', remove_html_links)
