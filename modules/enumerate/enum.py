@@ -38,18 +38,16 @@ def dirs_search(text):
     
     
     further_search = re.findall(r'.*?/.*?', remove_html_links)
+    further_search_results = [re.sub(r'<.*?=','', dir) for dir in further_search]
     
-    directories = ['files', 'file', 'uploads']
-
-    further_dir = [dir for dir in further_search if dir in directories]
-
-
-
-
+    common_dirs =['files','uploads']
+    strip = [dirs.lstrip('/"').rstrip('/') for dirs in further_search_results]
+    results = [dirs for dirs in strip if dirs in common_dirs]
 
     filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
     filter_links = [dir for dir in filter_no_dir if '.' not in dir]
-    dirs = list(set(filter_links))
+    dirs = filter_links + results
+    dirs = list(set(dirs))
 
     return dirs
 
@@ -121,7 +119,7 @@ def comments(website_code):
     colours = colors()
     comments = re.findall(r'<!.*>', website_code)
     print(colours['CYAN']+ '\nFound Comments on the page' + colours['RESET'])
-    print(colours['GREEN'] + '\n', *comments, sep='\n')
+    print(colours['LIGHT_GREEN'] + '\n', *comments, sep='\n')
     print(colours['RESET'] + '\n') 
 
 def javascript_links(text):
