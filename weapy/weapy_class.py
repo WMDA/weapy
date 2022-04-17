@@ -59,9 +59,6 @@ class WeaPy:
 
         if self.data != False:
             self.http_request.post(self.url)
-
-        if self.xss == True:
-            xss_scanner(args)
         
         if self.all == True:
             try:
@@ -107,7 +104,6 @@ class WeaPy:
         self.javascript = args['javascript']
         self.css = args['css']
         self.data = args['post']
-        self.xss = args['xss']
         self.all = args['all']
         self.comments = args['comments']
         

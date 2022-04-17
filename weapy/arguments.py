@@ -6,7 +6,19 @@ import re
 #WeaPy modules
 from modules.prettify.colours import colors
 
-def set_arguments():
+def set_arguments() -> dict:
+
+    '''
+    Function to set arguments using arparse.
+
+    Parameters.
+    ----------
+    None
+
+    Returns
+    ------
+    Args:dict Dictionary of set arguments.
+    '''
     
     option = argparse.ArgumentParser()
     
@@ -25,7 +37,6 @@ def set_arguments():
     option.add_argument('-c','--cookie', dest='cookie', help='set cookie name and value. Usage is python dict ({name:value})')
     option.add_argument('-H','--header', dest='header', help='set modified header. Usage is python dict ({name:value})')
     option.add_argument('-X','--post', dest='post', help='Makes a post request.', action='store_true')
-    option.add_argument('--xss', dest='xss', help='Scans website for XSS vulns.', action='store_true')
     option.add_argument('--debug', dest='debug', help='prints out args dictionary to help with development', action='store_true')
 
     arg = vars(option.parse_args())
@@ -36,16 +47,28 @@ def set_arguments():
     return arg
 
 
-def clean_dictionary(dictionary):
+def clean_dictionary(dictionary:dict) -> dict:
 
-    for (key, val) in dictionary.items():
+    '''
+    Function to clean dictionary by returning null values into False.
+
+    Parameters
+    ---------
+    dictionary:dict Dictionary of set arguments.
+
+    Returns
+    -------
+    dictionary:dict Dictionary of arguments with Null changed to False
+    '''
+
+    for key, val in dictionary.items():
         if val == None:
             dictionary.update({key: False})
-    
+
     return dictionary
 
 
-def clean_url(url):
+def clean_url(url:str) -> str:
     
     colours = colors()
 

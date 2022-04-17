@@ -14,7 +14,7 @@ setup(
     name="WeaPY", 
     version=VERSION,
     author="WMDA (aka DAniel Halls)",
-    author_email="p3dh0001@gmail.com>",
+    author_email="dOn'T aSk",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
