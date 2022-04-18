@@ -69,6 +69,18 @@ def clean_dictionary(dictionary:dict) -> dict:
 
 
 def clean_url(url:str) -> str:
+
+    '''
+    Function to check url is correct and to check top level domain
+
+    Parameters
+    ----------
+    url:str URL to check
+
+    Returns
+    -------
+    url:str Checked url
+    '''
     
     colours = colors()
 
@@ -93,8 +105,19 @@ def clean_url(url:str) -> str:
 
     return url
 
-def clean(string_to_clean):
-    
+def clean(string_to_clean:str) -> dict:
+
+    '''
+    Function to turn string into python dictionary
+
+    Parameters
+    ----------
+    string_to_clean:str string to turn into python dictionary.
+
+    Returns
+    -------
+    dictionary:dict Python dictionary of entered string.
+    '''
     key = re.findall(r'{.*?:', string_to_clean)
     val = re.findall(r':.*?}', string_to_clean)
     key = str(*key).strip(':').strip('{')
@@ -104,7 +127,19 @@ def clean(string_to_clean):
     return dictionary
     
 
-def arguments():
+def arguments() -> dict:
+    
+    '''
+    Wrapper function. Sets arguments, cleans string into format weapy can understand
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    args:dict Set of arguments for weapy.
+    '''
     
     set_args = set_arguments()
     args = clean_dictionary(set_args)

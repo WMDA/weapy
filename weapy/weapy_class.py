@@ -1,6 +1,4 @@
 # External Modules 
-from logging import exception
-import requests
 import sys
 
 # WeaPy modules
@@ -9,23 +7,24 @@ import modules.prettify.enum_output as enum
 from modules.enumerate.enum import comments
 from modules.http_requests.http_request import HTTPRequests
 
-
-
 class WeaPy:
 
     '''
-    WeaPy standalone main calss. Calls functions based on arguments passed, assigns arguments to self parameter,
-    makes get request to website along with header and cookie info. 
+    WeaPy standalone main calss. Calls functions based on arguments passed, 
+    assigns arguments to self parameter,makes get request to website along 
+    with header and cookie info. 
     '''
 
-    def __init__(self,args):
+    def __init__(self, args:dict):
 
         '''
         init function. Calls functions based on arguments
+        
         Parameters
         ---------------
-        self : self parameter
-        args : dictionary of arguments
+        self self parameter
+        args:dict dictionary of arguments
+        
         Returns
         -----------------
         GET request to website with header info
@@ -74,16 +73,16 @@ class WeaPy:
             comments(self.http_request.req.text)
 
 
-        
-
-    def args(self,args):
+    def args(self, args:dict):
 
         '''
         Assigns keywords to self parameter
+        
         Parameters
         ---------------
-        self : self parameter
-        args : Python dictionary of arguments
+        self parameter
+        args:dict dictionary of arguments
+        
         Returns
         ----------------
         arguments assigned to self parameter
@@ -106,4 +105,3 @@ class WeaPy:
         self.data = args['post']
         self.all = args['all']
         self.comments = args['comments']
-        

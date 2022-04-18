@@ -9,21 +9,22 @@ from modules.enumerate import enum
 '''
 This is the enumerate modules output.
 
-Most of WeaPy enumerates logic happens in the enum_modules while enum handles making the output look cooleo.
+Most of WeaPy enumerates logic happens in the enum_modules while 
+enum handles making the output look cooleo.
 '''
 
-def bs4_output(request):
+def bs4_output(request:str) -> str:
 
     '''
     Prettifys and adds colour to BeautifulSoup output.
 
     Parameters
-    ----------------------------------------------
-    Request (str): HTML source code from requests module
+    ----------
+    Request:str HTML source code from requests module
 
     Returns
-    ----------------------------------------------
-    final_output (str) : Output from Beautiful Soup's prettify with coloured source code.
+    -------
+    final_output:str Output from Beautiful Soup's prettify with coloured source code.
 
     '''
 
@@ -36,22 +37,22 @@ def bs4_output(request):
     return final_output
 
     
-def search_page(text):
+def search_page(text:str):
 
     '''
     Prints to terminal all of the links, files and dirs found in coloured format
 
 
     Paramters
-    ---------------------------------
+    ---------
     Request (str): HTML source code from requests module
 
 
     Returns
-    ----------------------------------
-    output_links (list): coloured list of links found in page (prints to terminal).
-    output_dirs (list): coloured list of dirs found in page (prints to terminal).
-    files_in_page (list): coloured list of files found in page (prints to terminal).
+    --------
+    output_links:list coloured list of links found in page (prints to terminal).
+    output_dirs:list coloured list of dirs found in page (prints to terminal).
+    files_in_page: list coloured list of files found in page (prints to terminal).
 
     '''
         
@@ -78,25 +79,22 @@ def search_page(text):
     print(*output_links, sep='\n')
     
 
-def webanalyzer_output(url):
+def webanalyzer_output(url:str):
 
     '''
-    Prints to terminal all of the backend technology found in webpage. Utilizes Wappalyzer for python
-
+    Prints to terminal all of the backend technology found in webpage. 
+    Utilizes Wappalyzer for python
 
     Paramters
-    ---------------------------------
+    ---------
     URL (str): Webpage URL
 
-
     Returns
-    ----------------------------------
-
-    techno (list of dictionary items): Coloured list of dictionary items of backend category, name and version
+    -------
+    techno:list of dictionary items: Coloured list of dictionary items of backend category, name and version
 
     '''
-        
-    
+
     webanalyser = enum.webanalyzer(url)
     colours = colors()
     print(colours['LIGHT_CYAN'] + '\nFound the following web technologys:\n' + colours['BLUE'])
@@ -107,7 +105,20 @@ def webanalyzer_output(url):
     print('\n' + colours['RESET'])
 
 
-def header_output(website_headers):
+def header_output(website_headers:requests.models.Response):
+    
+    '''
+    Function to print header information to terminal in colour.
+    Also sets cookie info as a different color
+
+    Parameters
+    ----------
+    website_headers:requests.models.Response Request reponse.
+
+    Returns
+    -------
+    Header information (prints to termnial)
+    '''
 
     colours = colors()
     print(colours['PURPLE'] + colours['BOLD'] + '\nHeader and Set Cookie info\n' + colours['RESET'])
@@ -120,11 +131,14 @@ def header_output(website_headers):
 
 def ctf_mode(website_code):
     
+    '''
+    Work in progress function
+    '''
     enum.passwords(website_code)
     enum.comments(website_code)
 
 
-def javascript_output(text):
+def javascript_output(text:str):
 
     '''
     Prints .js files to terminal.
@@ -146,7 +160,7 @@ def javascript_output(text):
             print(js)
             print(colours['RED'] +'Unable to open page' + colours['RESET']) 
 
-def css_output(text):
+def css_output(text:str):
 
     '''
     Prints .js files to terminal.

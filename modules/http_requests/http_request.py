@@ -1,14 +1,15 @@
+#External modules
 import requests
 import sys
 
+#Weapy modules
 import modules.prettify.enum_output as enum
 import modules.enumerate.enum as enumerate
 from modules.prettify.colours import colors
 
-
 class HTTPRequests:
 
-    def __init__(self, args):
+    def __init__(self, args:dict):
 
         self.colours = colors()
         self.args(args)
@@ -22,7 +23,7 @@ class HTTPRequests:
             print(self.colours['WARNING'] + self.colours['BLINK'] + '\nCONNECTIVITY ERROR\n',self.colours['RESET'] + '\nUnable to connect to', 
             self.colours['RED'] + self.url, self.colours['RESET']+ '\nIs this a valid website?\nCheck your connectivity\n')
 
-    def args(self,args):
+    def args(self, args:dict):
 
         '''
         Assigns keywords to self parameter
@@ -45,13 +46,26 @@ class HTTPRequests:
         self.cookie = args['cookie']
         self.verbose = args['verbose']
 
-    def get(self,output):
+    def get(self, output:bool):
+
+        '''
+        Function to make get requests
+
+        Parameters
+        ----------
+        self parameter
+        output:bool argument to print output to terminal
+        
+        Returns
+        -------
+        Get request
+        '''
         
         self.req = requests.get(self.url, auth=(self.username, self.password), cookies=self.cookie, headers=self.header)
                
         if self.req.status_code == 200:         
             print(self.colours['GREEN'] + f'\n{self.url} is responding\n' + self.colours['RESET'])
-               
+
             if output == True:
                 print(enum.bs4_output(self.req.text))
                     
@@ -59,14 +73,38 @@ class HTTPRequests:
             print(self.colours['RED'] + f'{self.req.status_code} recieved from {self.url}' + self.colours['RESET'])
 
         
-    def headers(self,website):
+    def headers(self, website:requests.models.Response):
+
+        '''
+        Function to get header information from response.
+
+        Parameters
+        ----------
+        self parameter
+        website:requests.models.Response Request response.
+
+        Returns
+        -------
+        '''
 
         self.web_header = website.headers
 
         if self.verbose == True:
             enum.header_output(self.web_header)
 
-    def post(self, *submit_values):
+    def post(self):
+
+        '''
+        Function to make post request.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Post request.
+        '''
         
         form_data = enumerate.input_forms(self.req.text)
 
