@@ -5,6 +5,7 @@ import sys
 from modules.prettify.colours import colors
 import modules.prettify.enum_output as enum
 from modules.enumerate.enum import comments
+from modules.enumerate.search import text
 from modules.http_requests.http_request import HTTPRequests
 
 class WeaPy:
@@ -72,6 +73,9 @@ class WeaPy:
         if self.comments == True:
             comments(self.http_request.req.text)
 
+        if self.text != False:
+            text(self.http_request.req.text, self.text)
+
 
     def args(self, args:dict):
 
@@ -105,3 +109,4 @@ class WeaPy:
         self.data = args['post']
         self.all = args['all']
         self.comments = args['comments']
+        self.text = args['text']

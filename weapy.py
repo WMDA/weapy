@@ -6,7 +6,7 @@ from weapy.arguments import arguments
 from modules.prettify.colours import colors
 from weapy.weapy_class import WeaPy
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     
     arg = arguments()
     

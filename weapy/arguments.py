@@ -38,7 +38,7 @@ def set_arguments() -> dict:
     option.add_argument('-H','--header', dest='header', help='set modified header. Usage is python dict ({name:value})')
     option.add_argument('-X','--post', dest='post', help='Makes a post request.', action='store_true')
     option.add_argument('--debug', dest='debug', help='prints out args dictionary to help with development', action='store_true')
-
+    option.add_argument('-t', '--text', dest='text', help='Searches website code for specific text')
     arg = vars(option.parse_args())
     
     if not arg['url']:

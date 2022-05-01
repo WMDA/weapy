@@ -4,7 +4,8 @@ import requests
 
 #Modules from WeaPy
 from modules.prettify.colours import colors
-from modules.enumerate import enum 
+import modules.enumerate.enum as enum 
+import modules.enumerate.search as search
 
 '''
 This is the enumerate modules output.
@@ -29,10 +30,10 @@ def bs4_output(request:str) -> str:
     '''
 
     colours = colors()
-    soup= enum.bs4_parse(request)
+    soup = enum.bs4_parse(request)
     pretty = soup.prettify()
-    color_beg= re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'], pretty)
-    final_output= re.sub(r'>', colours['PURPLE'] + '> '+ colours['RESET'], color_beg)
+    color_beg = re.sub(r'<', colours['PURPLE'] + '<' + colours['GREEN'], pretty)
+    final_output = re.sub(r'>', colours['PURPLE'] + '> '+ colours['RESET'], color_beg)
       
     return final_output
 
@@ -57,9 +58,9 @@ def search_page(text:str):
     '''
         
     colours = colors()
-    files = enum.file_search(text)
+    files = search.file_search(text)
     files_in_page = [colours['BLUE'] + file + colours['RESET'] for file in files]
-    output_dirs = enum.dirs_search(text)
+    output_dirs = search.dirs_search(text)
     links = enum.links_search(text)
     output_links = [colours['BLUE'] + link.replace('"','') + colours['RESET'] for link in links]
     

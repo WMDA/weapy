@@ -30,56 +30,8 @@ def bs4_parse(request):
     
     return soup
 
-def dirs_search(text):
-
-    remove_ending_tags = re.sub(r'</.*?>', '', text)
-    remove_html_links = re.sub(r'(http.*//.*?[^\'"><]+)','', remove_ending_tags)
-    dir_list = re.findall(r'/[A-Za-z0-9_\.]*', remove_html_links)
-    
-    
-    further_search = re.findall(r'.*?/.*?', remove_html_links)
-    further_search_results = [re.sub(r'<.*?=','', dir) for dir in further_search]
-    
-    common_dirs = ['files','uploads', 'images']
-    strip = [dirs.lstrip('/"').rstrip('/') for dirs in further_search_results]
-    remove_tabs = [dirs.lstrip('\t"').rstrip('\t') for dirs in strip ]
-    results = [dirs for dirs in remove_tabs if dirs in common_dirs]
-
-    filter_no_dir = [dir for dir in dir_list if len(dir) > 1]
-    filter_links = [dir for dir in filter_no_dir if '.' not in dir]
-    dirs = filter_links + results
-    dirs = list(set(dirs))
-
-    return dirs
-
-def links_search(text): 
-
-   soup = bs4_parse(text)
-   page = soup.prettify()
-   html_links = re.findall(r'(http.*//.*?[^\'"><]+)', page)
-
-   return html_links
-
-
-def file_search(text):
-    
-    file_type = ['gif','txt','jpeg','html','py','png']
-    files = []
-    
-    for format in file_type:     
-        file_list = re.findall(r'[A-Za-z0-9-_]*.{}'.format(format), text)
-        
-        for file in file_list:
-            if file not in files:
-                if '.'in file:
-                    files.append(file)
-
-    return files
-
-
 def webanalyzer(url):
 
-        
     # Wappalyzer throws up unbalanced parentheses warnings
     warnings.filterwarnings('ignore')
     wappalyzer = Wappalyzer.latest()
@@ -123,15 +75,23 @@ def comments(website_code):
     print(colours['LIGHT_GREEN'] + '\n', *comments, sep='\n')
     print(colours['RESET'] + '\n') 
 
+def links_search(text): 
+
+   soup = bs4_parse(text)
+   page = soup.prettify()
+   html_links = re.findall(r'(http.*//.*?[^\'"><]+)', page)
+
+   return html_links
+
 def javascript_links(text):
     
-    links= links_search(text)
+    links = links_search(text)
     java_script = [js for js in links if '.js' in js]
     return java_script
 
 def css_links(text):
         
-    links= links_search(text)
+    links = links_search(text)
     css = [css for css in links if '.css' in css]
     return css
 
