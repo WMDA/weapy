@@ -1,4 +1,5 @@
 #External Modules
+from http.client import FOUND
 import re
 import requests
 
@@ -181,3 +182,24 @@ def css_output(text:str):
         except:
             print(css)
             print('Unable to open page')
+
+def found_form(source_code:str):
+    
+    '''
+    Prints out to console any form details
+
+    Parameters
+    ----------
+    source_code:str website source code
+    '''
+
+    colours = colors()
+    form = enum.find_input_forms(source_code)
+    
+    if form != None:
+        print(colours['CYAN'] + 'Found form:\n' + colours['RESET'])
+        cleaned_form = re.sub('<br/>', '', str(form))
+        print(colours['LIGHT_GREEN'] + cleaned_form + colours['RESET'], '\n')
+    
+    else:
+        print(colours['RED'] + 'No forms found:\n' + colours['RESET'])

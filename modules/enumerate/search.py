@@ -56,7 +56,7 @@ def dirs_search(text):
 
 def file_search(text):
     
-    file_type = ['gif','txt','jpeg','html','py','png']
+    file_type = ['gif', 'txt', 'jpeg', 'html', 'py', 'png', 'php']
     files = []
     
     for format in file_type:     

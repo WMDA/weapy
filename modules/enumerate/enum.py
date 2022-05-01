@@ -128,7 +128,7 @@ def input_forms(request, *submit_value, vulns=False):
     Work in progress. Functionally works however function may need to be split up.
     '''
         
-    colours =colors()
+    colours = colors()
     forms = find_input_forms(request)
     form_details = get_form_details(forms)
 

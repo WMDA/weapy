@@ -76,6 +76,9 @@ class WeaPy:
         if self.text != False:
             text(self.http_request.req.text, self.text)
 
+        if self.forms == True:
+            enum.found_form(self.http_request.req.text)
+
 
     def args(self, args:dict):
 
@@ -110,3 +113,4 @@ class WeaPy:
         self.all = args['all']
         self.comments = args['comments']
         self.text = args['text']
+        self.forms = args['forms']

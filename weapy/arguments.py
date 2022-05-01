@@ -39,6 +39,7 @@ def set_arguments() -> dict:
     option.add_argument('-X','--post', dest='post', help='Makes a post request.', action='store_true')
     option.add_argument('--debug', dest='debug', help='prints out args dictionary to help with development', action='store_true')
     option.add_argument('-t', '--text', dest='text', help='Searches website code for specific text')
+    option.add_argument('-f','--forms', dest='forms', help='Finds forms on the page', action='store_true')
     arg = vars(option.parse_args())
     
     if not arg['url']:
