@@ -166,5 +166,6 @@ def arguments() -> dict:
     if args['all'] == True:
         args['output'] = True
         args['verbose'] = True
+        args['forms'] = True
 
     return args
