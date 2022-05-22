@@ -2,6 +2,8 @@
 from distutils.command.upload import upload
 from bs4 import BeautifulSoup
 import re
+
+from matplotlib.pyplot import flag
 from Wappalyzer import Wappalyzer, WebPage
 import warnings
 
@@ -66,6 +68,18 @@ def passwords(website_code):
     
     else:
         print(colours['WARNING'] + 'NO PASSWORDS FOUND')
+
+def flags(website_code):
+    colours = colors()
+    flags = re.findall('...{.*}', website_code)
+    
+    if len(flags) >0:
+        print(colours['BLINK'] + colours['CYAN'] + colours['BOLD'] +
+        'POTENTIAL FLAGS FOUND!!' + colours['RESET'] + colours['BOLD'])
+        print(*flags, sep='\n')
+    
+    else:
+        print(colours['WARNING'] + 'NO FLAGS FOUND')
 
 def comments(website_code):
 

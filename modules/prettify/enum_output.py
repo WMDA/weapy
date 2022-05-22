@@ -138,6 +138,7 @@ def ctf_mode(website_code):
     '''
     enum.passwords(website_code)
     enum.comments(website_code)
+    enum.flags(website_code)
 
 
 def javascript_output(text:str):
