@@ -61,10 +61,10 @@ def passwords(website_code):
     passwords = re.findall('password[\w\s.].*', website_code)
     
     if len(passwords) >0:
-        print(colours['BLINK'] + colours['YELLOW'] + colours['BOLD'] +
+        print(colours['YELLOW'] + colours['BOLD'] +
         'POTENTIAL PASSWORDS FOUND!!' + colours['RESET'] + colours['BOLD'])
-         
-        print(*passwords, sep='\n')
+        print(colours['LIGHT_GREEN'] + '/n', *passwords, sep='\n')
+        print(colours['RESET'] + '\n') 
     
     else:
         print(colours['WARNING'] + 'NO PASSWORDS FOUND')
@@ -74,9 +74,10 @@ def flags(website_code):
     flags = re.findall('...{.*}', website_code)
     
     if len(flags) >0:
-        print(colours['BLINK'] + colours['CYAN'] + colours['BOLD'] +
+        print(colours['CYAN'] + colours['BOLD'] +
         'POTENTIAL FLAGS FOUND!!' + colours['RESET'] + colours['BOLD'])
-        print(*flags, sep='\n')
+        print(colours['LIGHT_GREEN'] + '/n', *flags, sep='\n')
+        print(colours['RESET'] + '\n') 
     
     else:
         print(colours['WARNING'] + 'NO FLAGS FOUND')
