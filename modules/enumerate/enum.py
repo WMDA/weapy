@@ -63,7 +63,7 @@ def passwords(website_code):
     if len(passwords) >0:
         print(colours['YELLOW'] + colours['BOLD'] +
         'POTENTIAL PASSWORDS FOUND!!' + colours['RESET'] + colours['BOLD'])
-        print(colours['LIGHT_GREEN'] + '/n', *passwords, sep='\n')
+        print(colours['LIGHT_GREEN'] + '\n', *passwords, sep='\n')
         print(colours['RESET'] + '\n') 
     
     else:
@@ -76,7 +76,7 @@ def flags(website_code):
     if len(flags) >0:
         print(colours['CYAN'] + colours['BOLD'] +
         'POTENTIAL FLAGS FOUND!!' + colours['RESET'] + colours['BOLD'])
-        print(colours['LIGHT_GREEN'] + '/n', *flags, sep='\n')
+        print(colours['LIGHT_GREEN'] + '\n', *flags, sep='\n')
         print(colours['RESET'] + '\n') 
     
     else:
