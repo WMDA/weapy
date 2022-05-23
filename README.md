@@ -1,8 +1,11 @@
 # weapy
 
-A command line webscrapper in python for ctfs, boot2root machines etc.
+Weapy is a source code reader primarly aimed at bug bounty/CTF competitions.
 
-There are two ways to run weapy, a "command and control framework" similar to metasploit (work in progress) called Web analysis in python (WaP) and a command line interface way similar to cURL called weapy.
+weapy will parse through source code for specific text, forms, flags (for ctf competitions), passwords, comments as well as giving some information on the back end technology of the website.
+
+EXPERIMENTAL
+WaP is a cmd prompt for weapy which is work in progress.
 
 ## Usage
 
@@ -21,9 +24,9 @@ python3 WaP.py
 ## Weapy
 
 ~~~
-usage: weapy.py [-h] [-u URL] [--user USER] [--password PASSWORD] [-o] [-j] [--css] [-s] [--comments] [-A] [-w] [-v] [--ctf] [-c COOKIE] [-H HEADER] [-X] [--xss] [--debug]
+usage: weapy.py [-h] [-u URL] [--user USER] [--password PASSWORD] [-o] [-j] [--css] [-s] [--comments] [-A] [-w] [-v] [--ctf] [-c COOKIE] [-H HEADER] [-X] [--debug] [-t TEXT] [-f]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -u URL, --url URL     URL of website
   --user USER           Username to access website, optional
@@ -43,4 +46,6 @@ optional arguments:
                         set modified header. Usage is python dict ({name:value})
   -X, --post            Makes a post request.
   --debug               prints out args dictionary to help with development
+  -t TEXT, --text TEXT  Searches website code for specific text
+  -f, --forms           Finds forms on the page
 ~~~
