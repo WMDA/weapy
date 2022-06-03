@@ -7,6 +7,7 @@ import modules.prettify.enum_output as enum
 from modules.enumerate.enum import comments
 from modules.enumerate.search import text
 from modules.http_requests.http_request import HTTPRequests
+from modules.file.file import url     
 
 class WeaPy:
 
@@ -33,6 +34,10 @@ class WeaPy:
         '''
 
         self.args(args)
+
+        if self.file !=False:
+            url(self.file, self.url)
+            sys.exit(0)
 
         try:
             self.http_request= HTTPRequests(args)
@@ -114,3 +119,4 @@ class WeaPy:
         self.comments = args['comments']
         self.text = args['text']
         self.forms = args['forms']
+        self.file = args['file']

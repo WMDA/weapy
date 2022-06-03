@@ -3,7 +3,6 @@ from distutils.command.upload import upload
 from bs4 import BeautifulSoup
 import re
 
-from matplotlib.pyplot import flag
 from Wappalyzer import Wappalyzer, WebPage
 import warnings
 
