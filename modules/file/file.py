@@ -23,7 +23,7 @@ def file_modules(args):
     filename = args['file']
     urls = get_url(filename, url) 
     for ip in urls:
-        args.update({'url':ip})
+        args.update({'url':ip.rstrip(' ')})
         WeaPy(args)
         
 
