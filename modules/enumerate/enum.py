@@ -101,6 +101,9 @@ def javascript_links(text):
     
     links = links_search(text)
     java_script = [js for js in links if '.js' in js]
+    extra_search = re.findall(r'.*js',text)
+    java_script = java_script + extra_search
+
     return java_script
 
 def css_links(text):
