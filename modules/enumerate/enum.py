@@ -132,7 +132,7 @@ def find_input_forms(request: str) -> str:
     forms = soup.find('form')
     return forms
 
-def get_form_details(form):
+def get_form_details(form) -> dict:
     
     details = {}
     # get the form action (requested URL)
