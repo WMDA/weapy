@@ -17,7 +17,7 @@ def set_arguments() -> dict:
 
     Returns
     ------
-    Args:dict Dictionary of set arguments.
+    Args: Dictionary of set arguments.
     '''
     
     option = argparse.ArgumentParser()

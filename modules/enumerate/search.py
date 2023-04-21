@@ -4,7 +4,7 @@ import re
 from modules.prettify.colours import colors
 from modules.enumerate.enum import bs4_parse
 
-def text(website_code:str, search_parameter:str):
+def text(website_code:str, search_parameter:str) -> None:
 
     '''
     Function to search page source code for spefic text.
@@ -30,7 +30,7 @@ def text(website_code:str, search_parameter:str):
     else:
         print(colours['RED'] + f'\nCould not find {search_parameter} on the page' + colours['RESET'], '\n')
 
-def dirs_search(text):
+def dirs_search(text) -> None:
 
     remove_ending_tags = re.sub(r'</.*?>', '', text)
     remove_html_links = re.sub(r'(http.*//.*?[^\'"><]+)','', remove_ending_tags)

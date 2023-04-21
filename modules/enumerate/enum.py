@@ -113,7 +113,20 @@ def css_links(text):
     return css
 
 
-def find_input_forms(request):
+def find_input_forms(request: str) -> str:
+
+    '''
+    Function to find input form and parameters 
+    from source code. 
+
+    Parameters
+    ----------
+    request: str of request reponse
+
+    Returns
+    -------
+    forms: str of input form if on the page.
+    '''
 
     soup = bs4_parse(request)
     forms = soup.find('form')
