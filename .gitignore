@@ -1,6 +1,7 @@
 #WeaPy Specific
 .WaPhistory
 test
+.weapy
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
